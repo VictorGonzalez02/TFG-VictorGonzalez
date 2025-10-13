@@ -1,0 +1,152 @@
+[
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GLWidget.cpp.o -c /home/victor/TFG-VictorGonzalez/GLWidget.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GLWidget.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GLWidget.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GPUCamera.cpp.o -c /home/victor/TFG-VictorGonzalez/GPUCamera.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GPUCamera.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GPUCamera.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GPUWorld.cpp.o -c /home/victor/TFG-VictorGonzalez/GPUWorld.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GPUWorld.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GPUWorld.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GUIRenderToy.cpp.o -c /home/victor/TFG-VictorGonzalez/GUIRenderToy.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GUIRenderToy.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GUIRenderToy.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GeometricObjects/Cub.cpp.o -c /home/victor/TFG-VictorGonzalez/GeometricObjects/Cub.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GeometricObjects/Cub.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GeometricObjects/Cub.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GeometricObjects/Face.cpp.o -c /home/victor/TFG-VictorGonzalez/GeometricObjects/Face.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GeometricObjects/Face.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GeometricObjects/Face.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GeometricObjects/GPUMaterial.cpp.o -c /home/victor/TFG-VictorGonzalez/GeometricObjects/GPUMaterial.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GeometricObjects/GPUMaterial.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GeometricObjects/GPUMaterial.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GeometricObjects/GPUScene.cpp.o -c /home/victor/TFG-VictorGonzalez/GeometricObjects/GPUScene.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GeometricObjects/GPUScene.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GeometricObjects/GPUScene.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GeometricObjects/Mesh.cpp.o -c /home/victor/TFG-VictorGonzalez/GeometricObjects/Mesh.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GeometricObjects/Mesh.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GeometricObjects/Mesh.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GeometricObjects/Object.cpp.o -c /home/victor/TFG-VictorGonzalez/GeometricObjects/Object.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GeometricObjects/Object.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GeometricObjects/Object.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/GeometricObjects/ObjectFactory.cpp.o -c /home/victor/TFG-VictorGonzalez/GeometricObjects/ObjectFactory.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/GeometricObjects/ObjectFactory.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/GeometricObjects/ObjectFactory.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/Lights/GPULight.cpp.o -c /home/victor/TFG-VictorGonzalez/Lights/GPULight.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/Lights/GPULight.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/Lights/GPULight.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/Lights/GPUPointLight.cpp.o -c /home/victor/TFG-VictorGonzalez/Lights/GPUPointLight.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/Lights/GPUPointLight.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/Lights/GPUPointLight.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/MainWindow.cpp.o -c /home/victor/TFG-VictorGonzalez/MainWindow.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/MainWindow.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/MainWindow.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/Utilities/GPUShader.cpp.o -c /home/victor/TFG-VictorGonzalez/Utilities/GPUShader.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/Utilities/GPUShader.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/Utilities/GPUShader.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/Utilities/Image.cpp.o -c /home/victor/TFG-VictorGonzalez/Utilities/Image.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/Utilities/Image.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/Utilities/Image.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/ImGuiFileDialog/ImGuiFileDialog.cpp.o -c /home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog/ImGuiFileDialog.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog/ImGuiFileDialog.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/ImGuiFileDialog/ImGuiFileDialog.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/ImGuiFileDialog/stb/stb_image.cpp.o -c /home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog/stb/stb_image.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog/stb/stb_image.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/ImGuiFileDialog/stb/stb_image.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/imgui/backends/imgui_impl_glfw.cpp.o -c /home/victor/TFG-VictorGonzalez/external/imgui/backends/imgui_impl_glfw.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/imgui/backends/imgui_impl_glfw.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/imgui/backends/imgui_impl_glfw.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/imgui/backends/imgui_impl_opengl3.cpp.o -c /home/victor/TFG-VictorGonzalez/external/imgui/backends/imgui_impl_opengl3.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/imgui/backends/imgui_impl_opengl3.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/imgui/backends/imgui_impl_opengl3.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/imgui/imgui.cpp.o -c /home/victor/TFG-VictorGonzalez/external/imgui/imgui.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/imgui/imgui.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/imgui/imgui.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/imgui/imgui_demo.cpp.o -c /home/victor/TFG-VictorGonzalez/external/imgui/imgui_demo.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/imgui/imgui_demo.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/imgui/imgui_demo.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/imgui/imgui_draw.cpp.o -c /home/victor/TFG-VictorGonzalez/external/imgui/imgui_draw.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/imgui/imgui_draw.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/imgui/imgui_draw.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/imgui/imgui_tables.cpp.o -c /home/victor/TFG-VictorGonzalez/external/imgui/imgui_tables.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/imgui/imgui_tables.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/imgui/imgui_tables.cpp.o"
+},
+{
+  "directory": "/home/victor/TFG-VictorGonzalez/build",
+  "command": "/usr/bin/g++  -I/home/victor/TFG-VictorGonzalez/build -I/home/victor/TFG-VictorGonzalez -I/home/victor/TFG-VictorGonzalez/external -I/home/victor/TFG-VictorGonzalez/external/imgui -I/home/victor/TFG-VictorGonzalez/external/ImGuiFileDialog -I/home/victor/TFG-VictorGonzalez/external/glm -I/home/victor/TFG-VictorGonzalez/external/imgui/backends  -Wall -fPIC -Wno-deprecated-declarations -g -std=gnu++17 -o CMakeFiles/P2-GPUToy.dir/external/imgui/imgui_widgets.cpp.o -c /home/victor/TFG-VictorGonzalez/external/imgui/imgui_widgets.cpp",
+  "file": "/home/victor/TFG-VictorGonzalez/external/imgui/imgui_widgets.cpp",
+  "output": "CMakeFiles/P2-GPUToy.dir/external/imgui/imgui_widgets.cpp.o"
+}
+]

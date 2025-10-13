@@ -1,0 +1,3 @@
+/home/victor/TFG-VictorGonzalez/build/CMakeFiles/P2-GPUToy.dir
+/home/victor/TFG-VictorGonzalez/build/CMakeFiles/edit_cache.dir
+/home/victor/TFG-VictorGonzalez/build/CMakeFiles/rebuild_cache.dir
