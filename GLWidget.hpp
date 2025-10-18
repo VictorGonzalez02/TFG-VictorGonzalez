@@ -97,6 +97,7 @@ private:
     shared_ptr<GPUShader> shaderPhong;
     shared_ptr<GPUShader> shaderGouraud;
     shared_ptr<GPUShader> shaderToon;
+    shared_ptr<GPUShader> shaderVoxel;
 
     shared_ptr<GPUShader> program;       // ID del programa ACTIU
 

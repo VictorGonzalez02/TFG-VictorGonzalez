@@ -16,7 +16,7 @@ void GUIRenderToy::setup_imgui(GLFWwindow* window) {
     ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+    ImGui_ImplOpenGL3_Init("#version 440");
 }
 
 void GUIRenderToy::cleanup_imgui()
@@ -116,6 +116,12 @@ void GUIRenderToy::renderMenus(GLWidget& glWidget)
                 selectedShading = "Toon";
                 setup->selectedShader = 6;
                 glWidget.activateShader("Toon", NULL);
+            }
+
+            if (ImGui::MenuItem("Voxel", NULL, selectedShading == "Voxel")) {
+                selectedShading = "Voxel";
+                setup->selectedShader = 7;
+                glWidget.activateShader("Voxel", NULL);
             }
 
             // Re-load shaders

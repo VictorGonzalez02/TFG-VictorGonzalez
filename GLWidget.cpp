@@ -85,9 +85,10 @@ void GLWidget::initShadersGPU()
     shaderTexture = make_shared<GPUShader>("Texture", "vTextureShader.glsl", "fTextureShader.glsl");
     shaderGouraud = make_shared<GPUShader>("Gouraud", "vGouraudShader.glsl", "fGouraudShader.glsl");
     shaderToon = make_shared<GPUShader>("Toon", "vToonShader.glsl", "fToonShader.glsl");
+    shaderVoxel = make_shared<GPUShader>("Voxel", "vertex_core.glsl", "fragment_core_Voxel_DDA.glsl");
 
     // shaders per defecte
-    program = shaderColor;
+    program = shaderVoxel;
 }
 
 void GLWidget::activateShader(const char* typeShader, const char* nameTexture) {
@@ -124,6 +125,10 @@ void GLWidget::activateShader(const char* typeShader, const char* nameTexture) {
         world->toGPU(program->getId());
     } else if (std::strcmp(typeShader, "Toon")==0){
         program = shaderToon;
+        program->use();
+        world->toGPU(program->getId());
+    } else if (std::strcmp(typeShader, "Voxel")==0){
+        program = shaderVoxel;
         program->use();
         world->toGPU(program->getId());
     } else {
