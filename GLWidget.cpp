@@ -1,7 +1,6 @@
 #include "GLWidget.hpp"
 
-GLWidget::GLWidget(int w, int h) : world(nullptr), xRot(0.0f), yRot(0.0f), zRot(0.0f), xTra(0.0f), yTra(0.0f),
-shaderColor(0), shaderTexture(0), program(0), 
+GLWidget::GLWidget(int w, int h) : world(nullptr), xRot(0.0f), yRot(0.0f), zRot(0.0f), xTra(0.0f), yTra(0.0f), program(0), 
 mousePressed(false), lastMouseX(0.0), lastMouseY(0.0)
 {
     // inicialització de la configuració
@@ -65,70 +64,24 @@ void GLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // En el cas d'usar textures, cal reactivar la textura
-    if (program->getName() == shaderTexture->getName() 
-        && world->isTextured() ) {
-        world->rebindTexture();
-    }
-
     // Dibuixar l'escena
     world->draw();
 }
 
 void GLWidget::initShadersGPU()
 {
-    shaderColor = make_shared<GPUShader>("Color", "vshader1.glsl", "fshader1.glsl");
-    //shaderTexture = make_shared<GPUShader>("Texture", "vshader2.glsl", "fshader2.glsl");
-    shaderMaterial = make_shared<GPUShader>("Material", "vMaterialShader.glsl", "fMaterialShader.glsl");
-    shaderNormal = make_shared<GPUShader>("Normal", "vNormalShader.glsl", "fNormalShader.glsl");
-    shaderPhong = make_shared<GPUShader>("Phong", "vPhongShader.glsl", "fPhongShader.glsl");
-    shaderTexture = make_shared<GPUShader>("Texture", "vTextureShader.glsl", "fTextureShader.glsl");
-    shaderGouraud = make_shared<GPUShader>("Gouraud", "vGouraudShader.glsl", "fGouraudShader.glsl");
-    shaderToon = make_shared<GPUShader>("Toon", "vToonShader.glsl", "fToonShader.glsl");
-    shaderVoxel = make_shared<GPUShader>("Voxel", "vertex_core.glsl", "fragment_core_Voxel_DDA.glsl");
+    this->shaders.push_back(new Shader(4, 5, 
+        "vertex_core.glsl", "fragment_core_Voxel_DDA.glsl"));
 
     // shaders per defecte
-    program = shaderVoxel;
+    program = shaders[0];
 }
 
 void GLWidget::activateShader(const char* typeShader, const char* nameTexture) {
 
     // TO DO: Modificar el mètode per a poder suportar més tipus de shaders
-    if (std::strcmp(typeShader,"Color")==0) {
-        program = shaderColor;
-        program->use();
-        world->toGPU(program->getId());
-    } else if (std::strcmp(typeShader, "Texture")==0) {
-        program = shaderTexture;
-        program->use();
-        world->toGPUTexture(program->getId());
-       if (nameTexture != NULL && nameTexture[0] != '\0') {
-            world->initTextureGL(nameTexture);
-        } else {
-            std::cerr << "ERROR: No hi ha nom de textura." << std::endl;
-        }
-    } else if (std::strcmp(typeShader, "Material")==0){
-        program = shaderMaterial;
-        program->use();
-        world->toGPU(program->getId());
-    } else if (std::strcmp(typeShader, "Normal")==0){
-        program = shaderNormal;
-        program->use();
-        world->toGPU(program->getId());
-    } else if (std::strcmp(typeShader, "Phong")==0){
-        program = shaderPhong;
-        program->use();
-        world->toGPU(program->getId());
-    } else if (std::strcmp(typeShader, "Gouraud")==0){
-        program = shaderGouraud;
-        program->use();
-        world->toGPU(program->getId());
-    } else if (std::strcmp(typeShader, "Toon")==0){
-        program = shaderToon;
-        program->use();
-        world->toGPU(program->getId());
-    } else if (std::strcmp(typeShader, "Voxel")==0){
-        program = shaderVoxel;
+    if (std::strcmp(typeShader, "Voxel")==0){
+        program = shaders[0];
         program->use();
         world->toGPU(program->getId());
     } else {

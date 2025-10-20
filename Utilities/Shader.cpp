@@ -6,28 +6,31 @@ std::string Shader::loadShaderSource(const char* fileName)
 	std::string src = "";
 
 	std::ifstream in_file;
+	std::string filePath = fileName;
+	filePath = "resources/GPUshaders/" + filePath;
 
-	in_file.open(fileName);
+	in_file.open(filePath);
 
 	if (in_file.is_open())
 	{
 		while (std::getline(in_file, temp))
 			src += temp + "\n";
+		
+		in_file.close();
+
+		std::string versionNr =
+		std::to_string(this->versionMajor) +
+		std::to_string(this->versionMinor) +
+		"0";
+
+		if(!src.empty()){
+			src.replace(src.find("#version"), 12, ("#version " + versionNr));
+		}
 	}
 	else
 	{
 		std::cout << "ERROR::SHADER::COULD_NOT_OPEN_FILE" << fileName << "\n";
 	}
-
-
-	in_file.close();
-
-	std::string versionNr =
-		std::to_string(this->versionMajor) +
-		std::to_string(this->versionMinor) +
-		"0";
-
-	src.replace(src.find("#version"), 12, ("#version " + versionNr));
 
 	return src;
 }
@@ -100,8 +103,8 @@ Shader::Shader(
 
 	vertexShader = loadShader(GL_VERTEX_SHADER, vertexFile);
 
-	if (geometryFile != "")
-		geometryShader = loadShader(GL_GEOMETRY_SHADER, geometryFile);
+	//if (geometryFile != "")
+		//geometryShader = loadShader(GL_GEOMETRY_SHADER, geometryFile);
 
 	fragmentShader = loadShader(GL_FRAGMENT_SHADER, fragmentFile);
 

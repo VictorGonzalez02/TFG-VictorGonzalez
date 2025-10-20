@@ -40,7 +40,8 @@ public:
 	
 
 	void unuse();
-	
+
+	GLuint getId(){return this->id;}
 
 	void set1i(GLint value, const GLchar* name);
 

@@ -13,6 +13,7 @@
 #include <filesystem>
 
 #include "Utilities/GPUShader.hpp"
+#include "Utilities/Shader.h"
 #include "GPUConfig.hpp"
 #include "GPUWorld.hpp"
 
@@ -90,16 +91,9 @@ private:
     glm::mat4 transform;
 
     // Shaders
-    shared_ptr<GPUShader> shaderColor;
-    shared_ptr<GPUShader> shaderTexture;
-    shared_ptr<GPUShader> shaderMaterial;
-    shared_ptr<GPUShader> shaderNormal;
-    shared_ptr<GPUShader> shaderPhong;
-    shared_ptr<GPUShader> shaderGouraud;
-    shared_ptr<GPUShader> shaderToon;
-    shared_ptr<GPUShader> shaderVoxel;
 
-    shared_ptr<GPUShader> program;       // ID del programa ACTIU
+    Shader* program;
+    std::vector<Shader*> shaders;       
 
     // Mouse control
     bool   mousePressed;
