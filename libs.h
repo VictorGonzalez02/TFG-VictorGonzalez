@@ -23,11 +23,11 @@
 
 #include<soil2/SOIL2.h>
 
-#include"Shader.h";
-#include"Material.h";
-#include"Vertex.h"
+#include"Utilities/Shader.h";
+#include"GeometricObjects/Material.h";
+#include"GeometricObjects/Vertex.h"
 #include"GeometricObjects/Mesh.h"
-#include"Primitives.h"
+#include"GeometricObjects/Primitives.h"
 #include"Light.h"
 #include"enums.h"
 

@@ -249,7 +249,7 @@ void Game::renderImGui()
 			);
 
 			if (fileName != NULL) {
-				strncpy_s(fileURL, fileName, sizeof(fileURL));
+				strncpy(fileURL, fileName, sizeof(fileURL));
 				fileURL[sizeof(fileURL) - 1] = '\0';  // Asegurar que la cadena termine con '\0'
 			}
 		}
