@@ -1,7 +1,7 @@
 #include "GUIRenderToy.hpp"
 
 GUIRenderToy::GUIRenderToy()
-    : fileObj(false), fileTexture(false), setup(nullptr), selectedShading("Color"), envMap("CubeMap") {
+    : fileObj(false), fileTexture(false), setup(nullptr), selectedShading("Voxel"), envMap("CubeMap") {
 }
 
 GUIRenderToy::~GUIRenderToy() {
@@ -73,54 +73,10 @@ void GUIRenderToy::renderMenus(GLWidget& glWidget)
 
         // Shadings menu
         if (ImGui::BeginMenu("Shadings")) {
-            // Color shader option
-            if (ImGui::MenuItem("Color", NULL, selectedShading == "Color")) {
-                selectedShading = "Color";
-                setup->selectedShader = 0;
-                glWidget.activateShader("Color", NULL);
-            }
-            // Color shader option
-            if (ImGui::MenuItem("Material", NULL, selectedShading == "Material")) {
-                selectedShading = "Material";
-                setup->selectedShader = 1;
-                glWidget.activateShader("Material", NULL);
-            }// Color shader option
-            if (ImGui::MenuItem("Normal", NULL, selectedShading == "Normal")) {
-                selectedShading = "Normal";
-                setup->selectedShader = 2;
-                glWidget.activateShader("Normal", NULL);
-            }
-            // Color shader option
-            if (ImGui::MenuItem("Gouraud", NULL, selectedShading == "Gouraud")) {
-                selectedShading = "Gouraud";
-                setup->selectedShader = 3;
-                glWidget.activateShader("Gouraud", NULL);
-            }
-            // Color shader option
-            if (ImGui::MenuItem("Phong", NULL, selectedShading == "Phong")) {
-                selectedShading = "Phong";
-                setup->selectedShader = 4;
-                glWidget.activateShader("Phong", NULL);
-            }
-
-            // Texture shader option
-            if (ImGui::MenuItem("Texture", NULL, selectedShading == "Texture")) {
-                selectedShading = "Texture";
-                setup->selectedShader = 5;
-                fileTexture = true;
-                openFileDialog(".png,.jpg,.jpeg,.tga,.bmp");
-            }
-
-            //Toon shader option
-            if (ImGui::MenuItem("Toon", NULL, selectedShading == "Toon")) {
-                selectedShading = "Toon";
-                setup->selectedShader = 6;
-                glWidget.activateShader("Toon", NULL);
-            }
-
+            
             if (ImGui::MenuItem("Voxel", NULL, selectedShading == "Voxel")) {
                 selectedShading = "Voxel";
-                setup->selectedShader = 7;
+                setup->selectedShader = 0;
                 glWidget.activateShader("Voxel", NULL);
             }
 

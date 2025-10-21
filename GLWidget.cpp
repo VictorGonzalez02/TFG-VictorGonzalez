@@ -27,7 +27,7 @@ void GLWidget::initializeGL()
     initWorld();  
 
     // Activació del shader per defecte i enviament del mon a la GPU
-    activateShader("Color", NULL);
+    activateShader("Voxel", NULL);
 }
 
 // Activa les característiques d'OpenGL que es faran servir
@@ -65,7 +65,8 @@ void GLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Dibuixar l'escena
-    world->draw();
+    //world->draw();
+    world->drawPointCloud(program);
 }
 
 void GLWidget::initShadersGPU()
@@ -83,7 +84,7 @@ void GLWidget::activateShader(const char* typeShader, const char* nameTexture) {
     if (std::strcmp(typeShader, "Voxel")==0){
         program = shaders[0];
         program->use();
-        world->toGPU(program->getId());
+        world->toGPU_PointCloud(program->getId(), program);
     } else {
         std::cerr << "Error: Tipus de shader desconegut." << std::endl;
     } 
@@ -225,7 +226,7 @@ void GLWidget::loadObject(const char* filename) {
     // This function should load the object from the specified file
     // and update the object in the scene
     auto mesh = make_shared<Mesh>(filename);
-    mesh->make();
+    //mesh->make();
     
     // TO DO Fitxa 2: Cal afegir Material a l'objecte de forma aleatòria
     std::random_device rd;
@@ -235,9 +236,9 @@ void GLWidget::loadObject(const char* filename) {
     glm::vec3 Kd(colDist(gen), colDist(gen), colDist(gen));
     glm::vec3 Ks(1.0f);
     shared_ptr<GPUMaterial> m = make_shared<GPUMaterial>(Ka, Kd, Ks, 100.0f);
-    mesh->setMaterial(m);
+    //mesh->setMaterial(m);
 
-    world->addObject(shared_ptr<Object>(mesh));
+    //world->addObject(shared_ptr<Object>(mesh));
     //Quan afegim un objecte nou fem reset de la transformació actual, ja que volem una nova matriu
     xRot = 0;
     yRot = 0;

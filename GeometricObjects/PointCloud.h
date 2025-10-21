@@ -6,7 +6,7 @@
 #include <tuple>
 
 #include"Vertex.h"
-#include"Shader.h"
+#include"Utilities/Shader.h"
 #include"Material.h"
 #include "Primitives.h"
 #include "Octree.h"
@@ -452,7 +452,7 @@ public:
 
 		// Determine file extension
 		std::string extension = filePath.substr(filePath.find_last_of(".") + 1);
-
+		//std::cout << extension << "\n";
 		if (extension == "obj")
 		{
 			if (!Loader::loadFromOBJFile(filePath, this->vertices, minVertex, maxVertex))
@@ -503,7 +503,7 @@ public:
 		this->octreeError = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->verticesError,2);
 		this->multiOctree->mergeOctree(octreeError);
 
-		this->initSSBO();
+		//this->initSSBO();
 		//this->initPointCloudAsOctree();
 		//this->initPointCloudErrorAsOctree();
 		this->initPointCloudAsMultiOctree();
@@ -727,7 +727,7 @@ public:
 	void addRadius(const float& dt)
 	{	
 		float newRad = this->radius + dt;
-		newRad = max(0.01f, min(newRad, 10.0f));
+		newRad = std::max(0.01f, std::min(newRad, 10.0f));
 		this->radius = newRad;
 		
 	}

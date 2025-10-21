@@ -21,6 +21,7 @@ public:
     shared_ptr<GPULightsManager> lightsManager;
     // Camera 
     shared_ptr<GPUCamera> camera;
+
  
     // Configuracio de la visualitzacio
     shared_ptr<GPUConfig> setup;
@@ -63,10 +64,14 @@ public:
         scene->lastObjectToGPU(program);
     }
     void toGPU(GLuint program) override;
+    void toGPU_PointCloud(GLuint program, Shader* shader);
 
     void draw() override {
         scene->draw();
     };
+    void drawPointCloud(Shader* s){
+        scene->drawPointCloud(s);
+    }
 
     void toGPUTexture(GLuint program);
     bool isTextured() { return scene->isTextured(); };

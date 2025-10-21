@@ -3,6 +3,7 @@
 
 #include "Loader.h"
 #include <unordered_map>
+#include <filesystem>
 
 bool Loader::loadFromtxtFile(const std::string& filePath, std::vector<Point>& vertices, glm::vec3& minVertex, glm::vec3& maxVertex)
 {
@@ -42,7 +43,7 @@ bool Loader::loadFromtxtFile(const std::string& filePath, std::vector<Point>& ve
 			maxVertex = glm::max(maxVertex, vertex);
 		}
 
-		// Aquí se pueden añadir otros datos adicionales necesarios para cada punto
+		// Aquï¿½ se pueden aï¿½adir otros datos adicionales necesarios para cada punto
 		vertices.push_back(point);
 		cont += 1;
 
@@ -56,7 +57,7 @@ bool Loader::loadFromtxtFile(const std::string& filePath, std::vector<Point>& ve
 		}
 	}
 
-	// El vector 'vertices' ahora contiene todos los puntos leídos del archivo
+	// El vector 'vertices' ahora contiene todos los puntos leï¿½dos del archivo
 	return true;
 }
 
@@ -143,7 +144,7 @@ bool Loader::loadFromOBJFile(const std::string& filePath, std::vector<Point>& ve
 		vertices.push_back(newP);
 	}
 	//vertices = temp_vertices;
-	// Procesar los datos de temp_vertices según las necesidades de tu aplicación
+	// Procesar los datos de temp_vertices segï¿½n las necesidades de tu aplicaciï¿½n
 	// y almacenarlos en las estructuras de datos de la clase PointCloud.
 
 	return true;
@@ -287,6 +288,7 @@ void Loader::swapBytes(char* data, int size)
 bool Loader::loadFromPLYFile(const std::string& filePath, std::vector<Point>& vertices, glm::vec3& minVertex, glm::vec3& maxVertex)
 {
 	std::ifstream file(filePath);
+	//std::cout << std::filesystem::current_path() << filePath << "\n";
 	if (!file.is_open())
 	{
 		std::cerr << "Error: Could not open PLY file: " << filePath << std::endl;
@@ -329,7 +331,7 @@ bool Loader::loadFromASCIIPLYFile(const std::string& filePath, std::vector<Point
 		return false;
 	}
 
-	// Variables para almacenar el número de vertices y la posición actual en el archivo
+	// Variables para almacenar el nï¿½mero de vertices y la posiciï¿½n actual en el archivo
 	int numVertices = -1;
 	int currentVertexIndex = 0;
 
@@ -342,7 +344,7 @@ bool Loader::loadFromASCIIPLYFile(const std::string& filePath, std::vector<Point
 
 		if (type == "element")
 		{
-			// Leer el número de vertices del archivo
+			// Leer el nï¿½mero de vertices del archivo
 			std::string elementType;
 			int count;
 			iss >> elementType >> count;
@@ -353,7 +355,7 @@ bool Loader::loadFromASCIIPLYFile(const std::string& filePath, std::vector<Point
 		}
 		else if (type == "end_header")
 		{
-			// Después de leer el header, se deben haber encontrado el número de vertices
+			// Despuï¿½s de leer el header, se deben haber encontrado el nï¿½mero de vertices
 			if (numVertices == -1)
 			{
 				std::cerr << "Error: Invalid PLY file format." << std::endl;
@@ -367,7 +369,7 @@ bool Loader::loadFromASCIIPLYFile(const std::string& filePath, std::vector<Point
 				glm::vec3 vertex;
 				file >> vertex.x >> vertex.y >> vertex.z;
 
-				// Actualizar las coordenadas mínimas y máximas
+				// Actualizar las coordenadas mï¿½nimas y mï¿½ximas
 				if (i == 0)
 				{
 					minVertex = maxVertex = vertex;
@@ -378,13 +380,13 @@ bool Loader::loadFromASCIIPLYFile(const std::string& filePath, std::vector<Point
 					maxVertex = glm::max(maxVertex, vertex);
 				}
 
-				// Agregar el vértice al vector
+				// Agregar el vï¿½rtice al vector
 				Point p;
 				p.position = vertex;
 				p.color = glm::vec3(1.f, 0.f, 0.f);
 				vertices[i] = p;
 
-				// Incrementar el índice actual del vértice
+				// Incrementar el ï¿½ndice actual del vï¿½rtice
 				currentVertexIndex++;
 			}
 		}
