@@ -436,10 +436,11 @@ void GUIRenderToy::handleFileDialogResult(GLWidget& glWidget) {
                 glWidget.loadObject(selectedFile.c_str());
                 fileObj = false;
             } else if (filePointCloud) {
-                // Load the selected OBJ file
+                // Load the selected PLY file
                 std::cout << "Fitxer PLY seleccionat: " << selectedFile << std::endl;
-                glWidget.loadObject(selectedFile.c_str());
-                fileObj = false;
+                glWidget.loadPointCloud(selectedFile.c_str());
+                glWidget.activateShader("Color", NULL);
+                filePointCloud = false;
             }else {
                 if (fileTexture) {
                     // Load the selected texture file

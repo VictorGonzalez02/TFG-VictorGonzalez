@@ -3,7 +3,7 @@
 GPUScene::GPUScene()
 {
     objects.clear();
-    pointCloud = new PointCloud(1, "resources/OBJFiles/1_0_0.ply");
+    pointCloud = nullptr;
    
 }
 /**
@@ -33,13 +33,17 @@ void GPUScene::toGPU(GLuint p) {
     for(unsigned int i=0; i < objects.size(); i++){
         objects.at(i)->toGPU(p);
     }
-    this->pointCloud->toGPU(p);
+    if(this->pointCloud != nullptr){
+        this->pointCloud->toGPU(p);
+    }
 }
 
 void GPUScene::toGPU_PointCloud(GLuint p){
     program = p;
     //this->pointCloud->bind3DTexture();
-    this->pointCloud->toGPU(p);
+    if(this->pointCloud != nullptr){
+        this->pointCloud->toGPU(p);
+    }
 }
 
 void GPUScene::toGPUTexture(GLuint p) {
@@ -61,7 +65,9 @@ void GPUScene::draw() {
     for(unsigned int i=0; i < objects.size(); i++){
         objects.at(i)->draw();
     }
-    this->pointCloud->draw();
+    if(this->pointCloud != nullptr){
+        this->pointCloud->draw();
+    }
 }
 
 void GPUScene::drawPointCloud(){

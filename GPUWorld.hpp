@@ -37,6 +37,7 @@ public:
     
     void addLight(shared_ptr<GPUPointLight> l) { lightsManager->addLight(l); }
     void addObject (shared_ptr<Object> obj) { scene->addObject(obj);}
+    void addPointCloud(PointCloud* p){ scene->addPointCloud(p);}
 
     void updateAmbientLight(GLuint program, vec3 ambient) { 
         lightsManager->ambientLightToGPU(program, ambient);

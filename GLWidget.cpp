@@ -259,6 +259,11 @@ void GLWidget::loadObject(const char* filename) {
     
 }
 
+void GLWidget::loadPointCloud(const char* filename){
+    PointCloud* p = new PointCloud(1, filename);
+    world->addPointCloud(p);
+}
+
 void GLWidget::addCube() {
     auto c = new Cub();
     c->make();
@@ -291,6 +296,7 @@ void GLWidget::addCube() {
 void GLWidget::reset() {
     // Reset the scene
     world->scene->objects.clear();
+    world->scene->pointCloud = nullptr;
     world->toGPU(program->getId());
 
 }
