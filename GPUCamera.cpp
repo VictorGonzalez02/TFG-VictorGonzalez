@@ -16,6 +16,7 @@ void GPUCamera::toGPU(GLuint program)
    modelViewToGPU(program, viewMatrix);
    projectionToGPU(program, projectionMatrix);
    lookFromToGPU(program, origin);
+   //viewPortToGPU(program, vp); //TO DO
     
 }
 

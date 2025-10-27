@@ -35,22 +35,23 @@ in vec3 vs_position;
 out vec4 fs_color;
 
 //Uniforms
-uniform vec3 camPosition;
-uniform mat4 ViewMatrix;
-uniform mat4 ProjectionMatrix;
-uniform sampler3D texture3DD;
-uniform vec3 uVoxelDimensions;
-uniform vec3 uMinVertex;
-uniform vec3 uMaxVertex;
+//camPosition, ViewMatrix, ProjectionMatrix
+uniform vec3 lookFrom; //ok, canviar nom
+uniform mat4 viewMatrix; //ok, canviar nom
+uniform mat4 projectionMatrix; //ok, canviar nom
+uniform sampler3D texture3DD; //ok
+uniform vec3 uVoxelDimensions; //ok
+uniform vec3 uMinVertex; //ok
+uniform vec3 uMaxVertex; //ok
 uniform float uEpsilon;
 uniform float uMaxRayDistance;
 uniform vec2 window_size;
-uniform vec3 globalLight;
+uniform vec3 globalLight; //No s'usa
 uniform vec2 randomSeed;
-uniform vec3 planeOrigin;
-uniform float planeSize;
-uniform vec3 range;
-uniform ivec3 grid_dim;
+uniform vec3 planeOrigin; //ok
+uniform float planeSize; //ok
+uniform vec3 range; //ok
+uniform ivec3 grid_dim; //ok
 
 // Función drand48: devuelve un valor aleatorio entre -1 y 1 usando una técnica de generación de ruido
 // Agrega un parámetro adicional 'vec2 seed' para mejorar la aleatoriedad

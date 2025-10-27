@@ -64,13 +64,13 @@ public:
         scene->lastObjectToGPU(program);
     }
     void toGPU(GLuint program) override;
-    void toGPU_PointCloud(GLuint program, Shader* shader);
+    void toGPU_PointCloud(GLuint program);
 
     void draw() override {
         scene->draw();
     };
-    void drawPointCloud(Shader* s){
-        scene->drawPointCloud(s);
+    void drawPointCloud(){
+        scene->drawPointCloud();
     }
 
     void toGPUTexture(GLuint program);

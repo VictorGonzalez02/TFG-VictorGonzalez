@@ -33,11 +33,13 @@ void GPUScene::toGPU(GLuint p) {
     for(unsigned int i=0; i < objects.size(); i++){
         objects.at(i)->toGPU(p);
     }
+    this->pointCloud->toGPU(p);
 }
 
-void GPUScene::toGPU_PointCloud(GLuint p, Shader* s){
+void GPUScene::toGPU_PointCloud(GLuint p){
     program = p;
-    this->pointCloud->bind3DTexture();
+    //this->pointCloud->bind3DTexture();
+    this->pointCloud->toGPU(p);
 }
 
 void GPUScene::toGPUTexture(GLuint p) {
@@ -59,10 +61,14 @@ void GPUScene::draw() {
     for(unsigned int i=0; i < objects.size(); i++){
         objects.at(i)->draw();
     }
+    this->pointCloud->draw();
 }
 
-void GPUScene::drawPointCloud(Shader* s){
-    this->pointCloud->render(s);
+void GPUScene::drawPointCloud(){
+    /*glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    this->pointCloud->render(s);*/
+    this->pointCloud->draw();
 }
 
 void GPUScene::setMaterial(shared_ptr<GPUMaterial> m) {

@@ -23,6 +23,7 @@ public:
 private:
 
     bool fileObj = false;
+    bool filePointCloud = false;
     bool fileTexture = false;
     GPUConfig *setup;
     std::string selectedShading;

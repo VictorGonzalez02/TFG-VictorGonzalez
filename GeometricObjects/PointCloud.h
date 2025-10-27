@@ -24,6 +24,12 @@ private:
 	std::vector<std::vector<std::vector<std::vector<GLubyte>>>> image;
 	unsigned nrOfVertices;
 
+	std::vector<glm::vec4> pointCloudVertices;
+	std::vector<glm::vec4> pointCloudColors;
+	GLuint  VAO;
+    GLuint  vertex_buffer, color_buffer;
+	GLuint program;
+
 	int totalSize;
 
 	float radius;
@@ -138,6 +144,13 @@ private:
 
 		}
 		this->image = image;
+	}
+
+	void make(){
+		for(int i = 0; i < vertices.size(); i++){
+			pointCloudVertices.push_back(vec4(vertices.at(i).position, 1.0));
+			pointCloudColors.push_back(vec4(vertices.at(i).color, 1.0));
+		}
 	}
 
 	void initSSBO()
@@ -511,6 +524,7 @@ public:
 
 		//this->populateImage(this->vertices, totalSize);
 
+		this->make();
 		//this->initPointCloudAs3DTexture();
 	}
 
@@ -570,7 +584,8 @@ public:
 
 	void bind3DTexture()
 	{
-		glActiveTexture(GL_TEXTURE7);
+		//glActiveTexture(GL_TEXTURE7);
+		glActiveTexture(0);
 		glBindTexture(GL_TEXTURE_3D, this->id);
 	};
 
@@ -754,5 +769,45 @@ public:
 		return uMaxVertex;
 	}
 
-	
+	void toGPU(GLuint p){
+
+		program = p;
+		
+		glGenVertexArrays(1, &VAO);
+		glGenBuffers(1, &vertex_buffer);
+		glGenBuffers(1, &color_buffer);
+
+		glBindVertexArray(VAO);
+		// Bind vertices to layout location 0
+		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer );
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * pointCloudVertices.size(), &pointCloudVertices[0], GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0); // This allows usage of layout location 0 in the vertex shader
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+
+		// Bind normals to layout location 1
+		glBindBuffer(GL_ARRAY_BUFFER, color_buffer );
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * pointCloudColors.size(), &pointCloudColors[0], GL_STATIC_DRAW);
+		glEnableVertexAttribArray(1); // This allows usage of layout location 1 in the vertex shader
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+
+	}
+
+	void draw(){
+		glm::mat4 modelMatrix = glm::mat4(1.0f);
+		// TO DO: A modificar si es necessari
+		GLuint modelMatrixLoc = glGetUniformLocation(program, "modelMatrix");
+		glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+		//Invertim la matriu model per crear la matriu normal i la passem a GPU
+		mat4 normalMatrix = transpose(inverse(modelMatrix));
+		GLuint normalMatrixLoc = glGetUniformLocation(program, "normalMatrix");
+		glUniformMatrix4fv(normalMatrixLoc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_POINTS, 0, pointCloudVertices.size());
+		glBindVertexArray(0);
+	}
 };

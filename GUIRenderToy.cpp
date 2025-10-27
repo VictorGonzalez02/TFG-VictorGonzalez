@@ -1,7 +1,7 @@
 #include "GUIRenderToy.hpp"
 
 GUIRenderToy::GUIRenderToy()
-    : fileObj(false), fileTexture(false), setup(nullptr), selectedShading("Voxel"), envMap("CubeMap") {
+    : fileObj(false), fileTexture(false), setup(nullptr), selectedShading("Color"), envMap("CubeMap") {
 }
 
 GUIRenderToy::~GUIRenderToy() {
@@ -62,6 +62,12 @@ void GUIRenderToy::renderMenus(GLWidget& glWidget)
                 fileObj = true;
                 openFileDialog(".obj");
             }
+            if (ImGui::MenuItem("Open Pointcloud....")) {
+                // Aquí pots guardar la renderització
+                std::cout << "Obrint fitxer ply..." << std::endl;
+                filePointCloud = true;
+                openFileDialog(".ply");
+            }
             if (ImGui::MenuItem("Reset Scene")) {
                 // Aquí pots guardar la renderització
                 std::cout << "Reset..." << std::endl;
@@ -74,9 +80,15 @@ void GUIRenderToy::renderMenus(GLWidget& glWidget)
         // Shadings menu
         if (ImGui::BeginMenu("Shadings")) {
             
+            if (ImGui::MenuItem("Color", NULL, selectedShading == "Color")) {
+                selectedShading = "Color";
+                setup->selectedShader = 0;
+                glWidget.activateShader("Color", NULL);
+            }
+
             if (ImGui::MenuItem("Voxel", NULL, selectedShading == "Voxel")) {
                 selectedShading = "Voxel";
-                setup->selectedShader = 0;
+                setup->selectedShader = 1;
                 glWidget.activateShader("Voxel", NULL);
             }
 
@@ -423,7 +435,12 @@ void GUIRenderToy::handleFileDialogResult(GLWidget& glWidget) {
                 std::cout << "Fitxer OBJ seleccionat: " << selectedFile << std::endl;
                 glWidget.loadObject(selectedFile.c_str());
                 fileObj = false;
-            } else {
+            } else if (filePointCloud) {
+                // Load the selected OBJ file
+                std::cout << "Fitxer PLY seleccionat: " << selectedFile << std::endl;
+                glWidget.loadObject(selectedFile.c_str());
+                fileObj = false;
+            }else {
                 if (fileTexture) {
                     // Load the selected texture file
                     std::cout << "Fitxer de textura seleccionat: " << selectedFile << std::endl;

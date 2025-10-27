@@ -32,9 +32,9 @@ public:
     void lastObjectToGPU(GLuint program);
     
     void toGPU (GLuint p) override;
-    void toGPU_PointCloud (GLuint p, Shader* s);
+    void toGPU_PointCloud (GLuint p);
     void draw() override;  
-    void drawPointCloud(Shader* s);
+    void drawPointCloud();
 
     void toGPUTexture(GLuint p);
 

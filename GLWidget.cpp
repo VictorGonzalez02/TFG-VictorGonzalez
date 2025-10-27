@@ -1,6 +1,6 @@
 #include "GLWidget.hpp"
 
-GLWidget::GLWidget(int w, int h) : world(nullptr), xRot(0.0f), yRot(0.0f), zRot(0.0f), xTra(0.0f), yTra(0.0f), program(0), 
+GLWidget::GLWidget(int w, int h) : world(nullptr), xRot(0.0f), yRot(0.0f), zRot(0.0f), xTra(0.0f), yTra(0.0f), program(0), shaderColor(0),
 mousePressed(false), lastMouseX(0.0), lastMouseY(0.0)
 {
     // inicialització de la configuració
@@ -27,7 +27,7 @@ void GLWidget::initializeGL()
     initWorld();  
 
     // Activació del shader per defecte i enviament del mon a la GPU
-    activateShader("Voxel", NULL);
+    activateShader("Color", NULL);
 }
 
 // Activa les característiques d'OpenGL que es faran servir
@@ -65,26 +65,32 @@ void GLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Dibuixar l'escena
-    //world->draw();
-    world->drawPointCloud(program);
+    world->draw();
+    //world->drawPointCloud();
 }
 
 void GLWidget::initShadersGPU()
 {
-    this->shaders.push_back(new Shader(4, 5, 
-        "vertex_core.glsl", "fragment_core_Voxel_DDA.glsl"));
+    shaderColor = make_shared<GPUShader>("Color", "vshader1.glsl", "fshader1.glsl");
+    //this->shaders.push_back(new Shader(4, 5, "vertex_core.glsl", "fragment_core_Voxel_DDA.glsl"));
 
     // shaders per defecte
-    program = shaders[0];
+    program = shaderColor;
+    //programVoxel = shaders[0];
 }
 
 void GLWidget::activateShader(const char* typeShader, const char* nameTexture) {
 
     // TO DO: Modificar el mètode per a poder suportar més tipus de shaders
-    if (std::strcmp(typeShader, "Voxel")==0){
-        program = shaders[0];
+    if (std::strcmp(typeShader,"Color")==0) {
+        program = shaderColor;
         program->use();
-        world->toGPU_PointCloud(program->getId(), program);
+        world->toGPU(program->getId());
+    } else if (std::strcmp(typeShader, "Voxel")==0){
+        programVoxel = shaders[0];
+        programVoxel->use();
+        //world->toGPU(program->getId());
+        world->toGPU_PointCloud(program->getId());
     } else {
         std::cerr << "Error: Tipus de shader desconegut." << std::endl;
     } 

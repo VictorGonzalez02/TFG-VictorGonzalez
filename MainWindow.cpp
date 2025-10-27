@@ -84,6 +84,8 @@ int main(int argc, char *argv[])
         glWidget.paintGL();
         
         ImGui::End();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
         // Refresh ImGui
         refreshGUI();
