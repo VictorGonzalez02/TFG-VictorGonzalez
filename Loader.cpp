@@ -268,6 +268,76 @@ bool Loader::loadFromBigEndianPLYFile(const std::string& filePath, std::vector<P
 	return true;
 }
 
+bool Loader::loadFromLittleEndianPLYFile(
+    const std::string& filePath,
+    std::vector<Point>& vertices,
+    glm::vec3& minVertex,
+    glm::vec3& maxVertex)
+{
+    std::ifstream file(filePath, std::ios::binary);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open PLY file: " << filePath << std::endl;
+        return false;
+    }
+
+    std::string line;
+    int numVertices = -1;
+    bool headerEnded = false;
+
+    // --- Read header ---
+    while (std::getline(file, line)) {
+        if (line.rfind("element vertex", 0) == 0) {
+            std::istringstream iss(line);
+            std::string tmp; iss >> tmp >> tmp >> numVertices;
+        } else if (line == "end_header") {
+            headerEnded = true;
+            break;
+        }
+    }
+
+    if (!headerEnded || numVertices <= 0) {
+        std::cerr << "Error: Invalid or missing PLY header.\n";
+        return false;
+    }
+
+    vertices.resize(numVertices);
+
+    // --- Read binary vertex data ---
+    for (int i = 0; i < numVertices; ++i) {
+        float x, y, z;
+        unsigned char r, g, b;
+
+        file.read(reinterpret_cast<char*>(&x), sizeof(float));
+        file.read(reinterpret_cast<char*>(&y), sizeof(float));
+        file.read(reinterpret_cast<char*>(&z), sizeof(float));
+        file.read(reinterpret_cast<char*>(&r), sizeof(unsigned char));
+        file.read(reinterpret_cast<char*>(&g), sizeof(unsigned char));
+        file.read(reinterpret_cast<char*>(&b), sizeof(unsigned char));
+
+        if (!file) {
+            std::cerr << "Error: Unexpected end of file reading vertex " << i << std::endl;
+            return false;
+        }
+
+        glm::vec3 position(x, y, z);
+        glm::vec3 color(r / 255.0f, g / 255.0f, b / 255.0f);
+
+        if (i == 0)
+            minVertex = maxVertex = position;
+        else {
+            minVertex = glm::min(minVertex, position);
+            maxVertex = glm::max(maxVertex, position);
+        }
+
+        Point p;
+        p.position = position;
+        p.color = color;
+        vertices[i] = p;
+    }
+
+    file.close();
+    return true;
+}
 
 
 
@@ -313,6 +383,10 @@ bool Loader::loadFromPLYFile(const std::string& filePath, std::vector<Point>& ve
 	else if (line == "format binary_big_endian 1.0")
 	{
 		return loadFromBigEndianPLYFile(filePath, vertices, minVertex, maxVertex);
+	}
+	else if (line == "format binary_little_endian 1.0")
+	{
+		return loadFromLittleEndianPLYFile(filePath, vertices, minVertex, maxVertex);
 	}
 	else
 	{

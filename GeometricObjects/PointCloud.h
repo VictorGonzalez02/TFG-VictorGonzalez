@@ -807,6 +807,7 @@ public:
 		glUniformMatrix4fv(normalMatrixLoc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
 		glBindVertexArray(VAO);
+		glPointSize(1);
 		glDrawArrays(GL_POINTS, 0, pointCloudVertices.size());
 		glBindVertexArray(0);
 	}
