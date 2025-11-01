@@ -495,7 +495,7 @@ public:
 		//Iniciamos variables
 		this->initVariables(minVertex, maxVertex, totalSize, scale);
 		this->populateImage();
-		this->initPointCloudAs3DTexture();
+		//this->initPointCloudAs3DTexture();
 
 		for (int i = 0; i < vertices.size(); i++) {
 			// Verificar si el vértice tiene un cero en la tercera componente de 'labels'
@@ -510,17 +510,17 @@ public:
 		}
 		
 
-		this->octree = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->vertices, 2);
-		this->multiOctree = new MultiOctree(this->octree);
+		//this->octree = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->vertices, 2);
+		//this->multiOctree = new MultiOctree(this->octree);
 		
-		this->octreeError = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->verticesError,2);
-		this->multiOctree->mergeOctree(octreeError);
+		//this->octreeError = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->verticesError,2);
+		//this->multiOctree->mergeOctree(octreeError);
 
 		//this->initSSBO();
 		//this->initPointCloudAsOctree();
 		//this->initPointCloudErrorAsOctree();
-		this->initPointCloudAsMultiOctree();
-		std::vector<OctreeNode*> a = this->octree->getLeafNodes();
+		//this->initPointCloudAsMultiOctree();
+		//std::vector<OctreeNode*> a = this->octree->getLeafNodes();
 
 		//this->populateImage(this->vertices, totalSize);
 

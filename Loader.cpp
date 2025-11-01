@@ -176,7 +176,7 @@ bool Loader::loadFromBigEndianPLYFile(const std::string& filePath, std::vector<P
 			std::string elementType;
 			int count;
 			iss >> elementType >> count;
-			if (elementType == "data_visual")
+			if (elementType == "vertex")
 			{
 				numVertices = count;
 			}
@@ -195,21 +195,17 @@ bool Loader::loadFromBigEndianPLYFile(const std::string& filePath, std::vector<P
 			{
 				file.seekg(0, std::ios_base::cur);
 
-				double l, x, y, z, p;
+				float x, y, z;
 				bool error;
-				file.read(reinterpret_cast<char*>(&l), sizeof(double));
-				file.read(reinterpret_cast<char*>(&x), sizeof(double));
-				file.read(reinterpret_cast<char*>(&y), sizeof(double));
-				file.read(reinterpret_cast<char*>(&z), sizeof(double));
-				file.read(reinterpret_cast<char*>(&p), sizeof(double));
+				file.read(reinterpret_cast<char*>(&x), sizeof(float));
+				file.read(reinterpret_cast<char*>(&y), sizeof(float));
+				file.read(reinterpret_cast<char*>(&z), sizeof(float));
 
 				if (!isBigEndian())
 				{
-					swapBytes(reinterpret_cast<char*>(&l), sizeof(double));
-					swapBytes(reinterpret_cast<char*>(&x), sizeof(double));
-					swapBytes(reinterpret_cast<char*>(&y), sizeof(double));
-					swapBytes(reinterpret_cast<char*>(&z), sizeof(double));
-					swapBytes(reinterpret_cast<char*>(&p), sizeof(double));
+					swapBytes(reinterpret_cast<char*>(&x), sizeof(float));
+					swapBytes(reinterpret_cast<char*>(&y), sizeof(float));
+					swapBytes(reinterpret_cast<char*>(&z), sizeof(float));
 				}
 
 				glm::vec3 vertex(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
@@ -226,7 +222,7 @@ bool Loader::loadFromBigEndianPLYFile(const std::string& filePath, std::vector<P
 
 				Point point;
 				point.position = vertex;
-				point.labels = glm::vec3(l, p, l==p);
+				/*point.labels = glm::vec3(l, p, l==p);
 				if (p != l)
 				{
 					//point.color = getColor(0);
@@ -234,15 +230,15 @@ bool Loader::loadFromBigEndianPLYFile(const std::string& filePath, std::vector<P
 				else
 				{
 					//point.color = getColor(1);
-				}
-				point.color = getColor(l);//glm::vec3(1.f, 0.f, 0.f);
-				point.normal = getColor(p);//glm::vec3(1.f, 0.f, 0.f);
+				}*/
+				point.color = glm::vec3(1.f, 0.f, 0.f);
+				//point.normal = getColor(p);//glm::vec3(1.f, 0.f, 0.f);
 				vertices[i] = point;
 
 				//file.seekg(sizeof(double), std::ios_base::cur);
 
 				// Contar los valores distintos de "l"
-				if (lCounts.find(l) != lCounts.end())
+				/*if (lCounts.find(l) != lCounts.end())
 				{
 					lCounts[l]++;
 				}
@@ -259,7 +255,7 @@ bool Loader::loadFromBigEndianPLYFile(const std::string& filePath, std::vector<P
 				else
 				{
 					pCounts[p] = 1;
-				}
+				}*/
 			}
 		}
 	}

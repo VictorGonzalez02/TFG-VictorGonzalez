@@ -113,6 +113,22 @@ void GLWidget::mousePressEvent(GLFWwindow* window, int button, int action, int m
 
 void GLWidget::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
 {
+    if(mousePressed){
+        GLfloat yaw = 0.0f;
+        GLfloat pitch = 0.0f;
+        double dx = xpos - lastMouseX;
+        double dy = ypos - lastMouseY;
+        lastMouseX = xpos;
+        lastMouseY = ypos;
+
+        yaw += static_cast<GLfloat>(dx) * config.sensitivityAmount;
+        pitch += static_cast<GLfloat>(dy) * config.sensitivityAmount;
+
+        world->camera->updateCameraVectors(yaw, pitch);
+        world->camera->toGPU(program->getId());
+    }
+    
+    /*
     if (mousePressed) {
         double dx = xpos - lastMouseX;
         double dy = ypos - lastMouseY;
@@ -145,6 +161,7 @@ void GLWidget::mouseMoveEvent(GLFWwindow* window, double xpos, double ypos)
         world->setTGLastObject(transform);
     
     }
+    */
 }
 
 // Funcions per a la GUI

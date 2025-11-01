@@ -108,7 +108,7 @@ class GPUConfig {
             // Input controls
             mouseMode = 1;   // 0 - translate, 1 -  rotate
             
-            sensitivityAmount = 0.5f;
+            sensitivityAmount = 0.3f;
             
             // Transformation
             sx = sy = 1.0f;

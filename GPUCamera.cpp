@@ -6,6 +6,8 @@ GPUCamera::GPUCamera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float dan
     vp.pmin = vec2( 0., 0.);
     vp.a = viewX;
     vp.h = viewY;
+    yaw = 0.0f;
+    pitch = 0.0f;
 
     setCamera(lookfrom, lookat, vup, vfov, dant, dpost, aspect);
 }
@@ -131,6 +133,34 @@ void GPUCamera::updateCamera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, f
     setCamera(lookfrom, lookat, vup, vfov, dant, dpost, float(vp.a)/float(vp.h));
 }
 
+void GPUCamera::updateCameraVectors(GLfloat y, GLfloat p) {
+    yaw += y;
+    pitch -= p;
+
+    pitch = glm::clamp(pitch, -89.0f, 89.0f);
+    if (yaw > 360.f || yaw < -360.f) 
+        yaw = 0.f;
+
+    glm::vec3 newFront;
+    newFront.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    newFront.y = sin(glm::radians(pitch));
+    newFront.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    newFront = glm::normalize(newFront);
+
+    glm::vec3 currFront = -w;
+
+    //// Lerp between old front and new front
+	float t = 0.1f; // This value can be changed to make the transition faster or slower
+    glm::vec3 smoothedFront = glm::normalize(glm::mix(currFront, newFront, t));
+
+    w = -smoothedFront;                      // w points from vrp to origin (back vector)
+    u = glm::normalize(glm::cross(vUp, w));  // recompute side vector
+    v = glm::cross(w, u);                    // recompute up vector (not necessarily normalized but ok)
+
+    origin = vrp + w * distancia;
+
+    CalculaModelView();
+}
 // TO DO a revisar
 void GPUCamera::init(int a, int h, Capsa3D capsaMinima)
 {
