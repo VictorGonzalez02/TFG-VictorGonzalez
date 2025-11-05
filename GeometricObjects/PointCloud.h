@@ -772,26 +772,45 @@ public:
 	void toGPU(GLuint p){
 
 		program = p;
-		
-		glGenVertexArrays(1, &VAO);
-		glGenBuffers(1, &vertex_buffer);
-		glGenBuffers(1, &color_buffer);
 
-		glBindVertexArray(VAO);
-		// Bind vertices to layout location 0
-		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer );
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * pointCloudVertices.size(), &pointCloudVertices[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0); // This allows usage of layout location 0 in the vertex shader
-		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+		if(program == 3){
+			glGenVertexArrays(1, &VAO);
+			glGenBuffers(1, &vertex_buffer);
+			glGenBuffers(1, &color_buffer);
 
-		// Bind normals to layout location 1
-		glBindBuffer(GL_ARRAY_BUFFER, color_buffer );
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * pointCloudColors.size(), &pointCloudColors[0], GL_STATIC_DRAW);
-		glEnableVertexAttribArray(1); // This allows usage of layout location 1 in the vertex shader
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+			glBindVertexArray(VAO);
+			// Bind vertices to layout location 0
+			glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer );
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * pointCloudVertices.size(), &pointCloudVertices[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(0); // This allows usage of layout location 0 in the vertex shader
+			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
+			// Bind normals to layout location 1
+			glBindBuffer(GL_ARRAY_BUFFER, color_buffer );
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * pointCloudColors.size(), &pointCloudColors[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(1); // This allows usage of layout location 1 in the vertex shader
+			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
+		} else{
+			GLuint posSSBO, colorSSBO;
+			// positions
+			glGenBuffers(1, &posSSBO);
+			glBindBuffer(GL_SHADER_STORAGE_BUFFER, posSSBO);
+			glBufferData(GL_SHADER_STORAGE_BUFFER,
+						pointCloudVertices.size() * sizeof(glm::vec4),
+						pointCloudVertices.data(), GL_STATIC_DRAW);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, posSSBO);
+
+			// colors
+			glGenBuffers(1, &colorSSBO);
+			glBindBuffer(GL_SHADER_STORAGE_BUFFER, colorSSBO);
+			glBufferData(GL_SHADER_STORAGE_BUFFER,
+						pointCloudColors.size() * sizeof(glm::vec4),
+						pointCloudColors.data(), GL_STATIC_DRAW);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, colorSSBO);
+		}
 
 	}
 

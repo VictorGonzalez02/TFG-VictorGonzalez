@@ -1,7 +1,7 @@
 #include "GUIRenderToy.hpp"
 
 GUIRenderToy::GUIRenderToy()
-    : fileObj(false), fileTexture(false), setup(nullptr), selectedShading("Color"), envMap("CubeMap") {
+    : fileObj(false), fileTexture(false), setup(nullptr), selectedShading("GL_Points"), envMap("CubeMap") {
 }
 
 GUIRenderToy::~GUIRenderToy() {
@@ -80,23 +80,23 @@ void GUIRenderToy::renderMenus(GLWidget& glWidget)
         // Shadings menu
         if (ImGui::BeginMenu("Shadings")) {
             
-            if (ImGui::MenuItem("Color", NULL, selectedShading == "Color")) {
-                selectedShading = "Color";
+            if (ImGui::MenuItem("GL_Points", NULL, selectedShading == "GL_Points")) {
+                selectedShading = "GL_Points";
                 setup->selectedShader = 0;
-                glWidget.activateShader("Color", NULL);
+                glWidget.activateShader("GL_Points", NULL);
             }
 
-            if (ImGui::MenuItem("Voxel", NULL, selectedShading == "Voxel")) {
-                selectedShading = "Voxel";
+            if (ImGui::MenuItem("ZTest", NULL, selectedShading == "ZTest")) {
+                selectedShading = "ZTest";
                 setup->selectedShader = 1;
-                glWidget.activateShader("Voxel", NULL);
+                glWidget.activateShader("ZTest", NULL);
             }
 
             // Re-load shaders
             if (ImGui::MenuItem("Reload Shaders")) {
                 // TO DO: ara si el shading seleccionat és Texture no es deixa activat per que no 
                 // es pot carregar sense un fitxer de textura. 
-                if (setup->selectedShader == 5) selectedShading = "Color";
+                if (setup->selectedShader == 5) selectedShading = "GL_Points";
                 glWidget.initShadersGPU();
                 setup->selectedShader = 0;
                 glWidget.activateShader(selectedShading.c_str(), NULL);
@@ -439,7 +439,7 @@ void GUIRenderToy::handleFileDialogResult(GLWidget& glWidget) {
                 // Load the selected PLY file
                 std::cout << "Fitxer PLY seleccionat: " << selectedFile << std::endl;
                 glWidget.loadPointCloud(selectedFile.c_str());
-                glWidget.activateShader("Color", NULL);
+                glWidget.activateShader("GL_Points", NULL);
                 filePointCloud = false;
             }else {
                 if (fileTexture) {

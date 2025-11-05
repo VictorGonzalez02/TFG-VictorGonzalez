@@ -1,11 +1,12 @@
 #include "GLWidget.hpp"
 
-GLWidget::GLWidget(int w, int h) : world(nullptr), xRot(0.0f), yRot(0.0f), zRot(0.0f), xTra(0.0f), yTra(0.0f), program(0), shaderColor(0),
+GLWidget::GLWidget(int w, int h) : world(nullptr), xRot(0.0f), yRot(0.0f), zRot(0.0f), xTra(0.0f), yTra(0.0f), program(0), shaderGL_Points(0),
 mousePressed(false), lastMouseX(0.0), lastMouseY(0.0)
 {
     // inicialització de la configuració
     config = GPUConfig(w, h); 
     transform = glm::mat4(1.0f);
+    setupBuffer();
 }
 
 GLWidget::~GLWidget()
@@ -27,7 +28,7 @@ void GLWidget::initializeGL()
     initWorld();  
 
     // Activació del shader per defecte i enviament del mon a la GPU
-    activateShader("Color", NULL);
+    activateShader("GL_Points", NULL);
 }
 
 // Activa les característiques d'OpenGL que es faran servir
@@ -65,32 +66,39 @@ void GLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Dibuixar l'escena
-    world->draw();
-    //world->drawPointCloud();
+    if(program->getId() == 3){
+        world->draw();
+    } else{
+        computePass();
+        displayPass();
+    }
 }
 
 void GLWidget::initShadersGPU()
 {
-    shaderColor = make_shared<GPUShader>("Color", "vshader1.glsl", "fshader1.glsl");
+    shaderGL_Points = make_shared<GPUShader>("GL_Points", "vshader1.glsl", "fshader1.glsl");
+    shaderZTest = make_shared<GPUShader>("ZTest", "cZTest.glsl");
+    shaderZTestDisplay = make_shared<GPUShader>("ZTestDisplay", "vshader2.glsl", "fshader2.glsl");
+
     //this->shaders.push_back(new Shader(4, 5, "vertex_core.glsl", "fragment_core_Voxel_DDA.glsl"));
 
     // shaders per defecte
-    program = shaderColor;
+    program = shaderGL_Points;
     //programVoxel = shaders[0];
 }
 
 void GLWidget::activateShader(const char* typeShader, const char* nameTexture) {
 
     // TO DO: Modificar el mètode per a poder suportar més tipus de shaders
-    if (std::strcmp(typeShader,"Color")==0) {
-        program = shaderColor;
+    if (std::strcmp(typeShader,"GL_Points")==0) {
+        program = shaderGL_Points;
         program->use();
         world->toGPU(program->getId());
-    } else if (std::strcmp(typeShader, "Voxel")==0){
-        programVoxel = shaders[0];
-        programVoxel->use();
-        //world->toGPU(program->getId());
-        world->toGPU_PointCloud(program->getId());
+    } else if (std::strcmp(typeShader, "ZTest")==0){
+        program = shaderZTest;
+        program->use();
+        world->toGPU(program->getId());
+        setupBuffer();
     } else {
         std::cerr << "Error: Tipus de shader desconegut." << std::endl;
     } 
@@ -308,6 +316,72 @@ void GLWidget::addCube() {
     // Cal actualitzar la GPU amb el nou objecte
     world->lastObjectToGPU(program->getId());
     world->aplicaTG(transform);
+}
+
+void GLWidget::setupBuffer(){
+    GLuint framebufferSSBO;
+    // allocate
+    glGenBuffers(1, &framebufferSSBO);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, framebufferSSBO);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, config.viewportWidth*config.viewportHeight*sizeof(uint32_t)*2, nullptr, GL_DYNAMIC_DRAW);
+
+    // initialize: low (rgb) = 0 (black), high (depth) = 0xFFFFFFFF (far)
+    std::vector<uint32_t> clear(config.viewportWidth*config.viewportHeight*2);
+    for (size_t i = 0; i < config.viewportWidth*config.viewportHeight; ++i) {
+        clear[i*2 + 0] = 0x000000u;      // rgb = black
+        clear[i*2 + 1] = 0xFFFFFFFFu;   // depth = max (so any real closer depth will be smaller)
+    }
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, clear.size()*sizeof(uint32_t), clear.data());
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, framebufferSSBO);
+}
+
+void GLWidget::computePass(){
+    glUniform1ui(glGetUniformLocation(program->getId(), "imageWidth"), config.viewportWidth);
+    glUniform1ui(glGetUniformLocation(program->getId(), "imageHeight"), config.viewportHeight);
+    glm::mat4 modelMatrix = glm::mat4(1.0f);
+    glUniformMatrix4fv(glGetUniformLocation(program->getId(), "modelMatrix"),
+                       1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+    glDispatchCompute((983599 + 255)/256, 1, 1);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_TEXTURE_FETCH_BARRIER_BIT);
+}
+
+void GLWidget::displayPass(){
+    program = shaderZTestDisplay;
+    program->use();
+
+    GLuint fullscreenVAO, fullscreenVBO;
+    {
+        // Fullscreen quad (2 triangles covering [-1,1] range)
+        const GLfloat fullscreenVertices[] = {
+            //   X,    Y
+            -1.0f, -1.0f,
+            1.0f, -1.0f,
+            1.0f,  1.0f,
+            -1.0f, -1.0f,
+            1.0f,  1.0f,
+            -1.0f,  1.0f
+        };
+
+        glGenVertexArrays(1, &fullscreenVAO);
+        glBindVertexArray(fullscreenVAO);
+
+        glGenBuffers(1, &fullscreenVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, fullscreenVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(fullscreenVertices), fullscreenVertices, GL_STATIC_DRAW);
+
+        // The fullscreen vertex shader expects layout(location = 0) in vec2 pos;
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+
+        glBindVertexArray(0);
+    }
+
+    glUniform1ui(glGetUniformLocation(program->getId(), "imageWidth"), config.viewportWidth);
+    glBindVertexArray(fullscreenVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3 * 2); // your fullscreen quad VAO
+    program = shaderZTest;
+    program->use();
 }
 
 void GLWidget::reset() {

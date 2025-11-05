@@ -74,6 +74,10 @@ public:
     void addCube();
     void reset();
 
+    void setupBuffer();
+    void computePass();
+    void displayPass();
+
 private:
 
     // Objectes de l'escena
@@ -93,10 +97,11 @@ private:
 
     // Shaders
 
-    shared_ptr<GPUShader> shaderColor;
+    shared_ptr<GPUShader> shaderGL_Points;
+    shared_ptr<GPUShader> shaderZTest;
+    shared_ptr<GPUShader> shaderZTestDisplay;
     shared_ptr<GPUShader> program; 
 
-    Shader* programVoxel;
     std::vector<Shader*> shaders;       
 
     // Mouse control

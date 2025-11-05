@@ -6,6 +6,11 @@ GPUShader::GPUShader(const char*name, const char *vertexPath, const char *fragme
     program = initShader(vertexPath, fragmentPath);
 }
 
+GPUShader::GPUShader(const char* name, const char* computePath) {
+    this->name = name;
+    program = initComputeShader(computePath);
+}
+
 GPUShader::~GPUShader()
 {
     glDeleteProgram(program);
@@ -52,6 +57,29 @@ GLuint GPUShader::initShader(const char* vname, const char* fname) {
     
         return program;
     
+}
+
+GLuint GPUShader::initComputeShader(const char* cname) {
+    if (cname == nullptr)
+        return 0;
+
+    std::string computeShaderSource = readShaderSource(cname);
+    if (computeShaderSource.empty()) {
+        std::cerr << "ERROR: No es pot llegir el fitxer compute shader\n";
+        return 0;
+    }
+
+    GLuint computeShader = compileShader(GL_COMPUTE_SHADER, computeShaderSource, "COMPUTE");
+    if (computeShader == 0)
+        return 0;
+
+    GLuint prog = glCreateProgram();
+    glAttachShader(prog, computeShader);
+    glLinkProgram(prog);
+    checkCompileErrors(prog, "PROGRAM");
+    glDeleteShader(computeShader);
+
+    return prog;
 }
 
 std::string GPUShader::getShaderPath(const std::string& filename) {
