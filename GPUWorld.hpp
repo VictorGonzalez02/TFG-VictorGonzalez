@@ -74,6 +74,10 @@ public:
         scene->drawPointCloud();
     }
 
+    int getNumPoints(){
+        return scene->getNumPoints();
+    }
+
     void toGPUTexture(GLuint program);
     bool isTextured() { return scene->isTextured(); };
     void rebindTexture() { scene->rebindTexture(); };

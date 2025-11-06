@@ -336,13 +336,18 @@ void GLWidget::setupBuffer(){
 }
 
 void GLWidget::computePass(){
+    //int numPoints = 983599;
+    //int numPoints = 3609600;
+    int numPoints = world->getNumPoints();
     glUniform1ui(glGetUniformLocation(program->getId(), "imageWidth"), config.viewportWidth);
     glUniform1ui(glGetUniformLocation(program->getId(), "imageHeight"), config.viewportHeight);
     glm::mat4 modelMatrix = glm::mat4(1.0f);
     glUniformMatrix4fv(glGetUniformLocation(program->getId(), "modelMatrix"),
                        1, GL_FALSE, glm::value_ptr(modelMatrix));
 
-    glDispatchCompute((983599 + 255)/256, 1, 1);
+    uvec2 clearValue = uvec2(0x00000000u, 0xFFFFFFFFu); // "empty" = far depth
+    glClearBufferData(GL_SHADER_STORAGE_BUFFER, GL_RG32UI, GL_RG_INTEGER, GL_UNSIGNED_INT, &clearValue);
+    glDispatchCompute((numPoints + 255)/256, 1, 1);
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_TEXTURE_FETCH_BARRIER_BIT);
 }
 

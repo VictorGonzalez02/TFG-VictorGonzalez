@@ -752,6 +752,9 @@ public:
 		return (this->uMaxVertex + this->uMinVertex) / 2.0f;
 	}
 	
+	int getNumPoints(){
+		return pointCloudVertices.size();
+	}
 
 	void SetMinVertex(const glm::vec3& minVertex) {
 		uMinVertex = minVertex;

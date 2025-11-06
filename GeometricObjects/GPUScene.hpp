@@ -36,6 +36,10 @@ public:
     void draw() override;  
     void drawPointCloud();
 
+    int getNumPoints(){
+        return pointCloud->getNumPoints();
+    }
+
     void toGPUTexture(GLuint p);
 
     bool isTextured() { 
