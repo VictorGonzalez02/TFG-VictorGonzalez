@@ -5,6 +5,27 @@
 #include <unordered_map>
 #include <filesystem>
 
+struct PLYProperty {
+    std::string name;
+    std::string type;
+    size_t size;
+};
+
+static size_t getTypeSize(const std::string& type) {
+    static const std::unordered_map<std::string, size_t> typeSizes = {
+        {"char", 1}, {"uchar", 1},
+        {"int8", 1}, {"uint8", 1},
+        {"short", 2}, {"ushort", 2},
+        {"int16", 2}, {"uint16", 2},
+        {"int", 4}, {"uint", 4},
+        {"int32", 4}, {"uint32", 4},
+        {"float", 4}, {"float32", 4},
+        {"double", 8}, {"float64", 8}
+    };
+    auto it = typeSizes.find(type);
+    return (it != typeSizes.end()) ? it->second : 0;
+}
+
 bool Loader::loadFromtxtFile(const std::string& filePath, std::vector<Point>& vertices, glm::vec3& minVertex, glm::vec3& maxVertex)
 {
 	std::ifstream file(filePath, std::ios::in);
@@ -277,42 +298,88 @@ bool Loader::loadFromLittleEndianPLYFile(
     }
 
     std::string line;
-    int numVertices = -1;
-    bool headerEnded = false;
+    bool littleEndian = true;
+    int numVertices = 0;
+    int numFaces = 0;
+    bool inVertexSection = false;
+    bool inFaceSection = false;
+    std::vector<PLYProperty> vertexProperties;
 
-    // --- Read header ---
+    // --- Parse header ---
     while (std::getline(file, line)) {
-        if (line.rfind("element vertex", 0) == 0) {
-            std::istringstream iss(line);
-            std::string tmp; iss >> tmp >> tmp >> numVertices;
-        } else if (line == "end_header") {
-            headerEnded = true;
+        line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
+        std::istringstream iss(line);
+        std::string token;
+        iss >> token;
+
+        if (token == "format") {
+            std::string fmt;
+            iss >> fmt;
+            if (fmt == "binary_big_endian") littleEndian = false;
+        } 
+        else if (token == "element") {
+            std::string elementType;
+            int count;
+            iss >> elementType >> count;
+            if (elementType == "vertex") {
+                numVertices = count;
+                inVertexSection = true;
+                inFaceSection = false;
+            } else if (elementType == "face") {
+                numFaces = count;
+                inVertexSection = false;
+                inFaceSection = true;
+            } else {
+                inVertexSection = inFaceSection = false;
+            }
+        } 
+        else if (token == "property" && inVertexSection) {
+            std::string type, name;
+            iss >> type >> name;
+            vertexProperties.push_back({name, type, getTypeSize(type)});
+        } 
+        else if (token == "end_header") {
             break;
         }
     }
 
-    if (!headerEnded || numVertices <= 0) {
-        std::cerr << "Error: Invalid or missing PLY header.\n";
+    if (numVertices == 0) {
+        std::cerr << "Error: No vertex element found in PLY file." << std::endl;
         return false;
     }
 
     vertices.resize(numVertices);
 
-    // --- Read binary vertex data ---
+    // --- Compute vertex stride ---
+    size_t vertexStride = 0;
+    for (auto& prop : vertexProperties) vertexStride += prop.size;
+
+    // --- Read vertex data ---
+    std::vector<char> buffer(vertexStride);
     for (int i = 0; i < numVertices; ++i) {
-        float x, y, z;
-        unsigned char r, g, b;
+        file.read(buffer.data(), vertexStride);
 
-        file.read(reinterpret_cast<char*>(&x), sizeof(float));
-        file.read(reinterpret_cast<char*>(&y), sizeof(float));
-        file.read(reinterpret_cast<char*>(&z), sizeof(float));
-        file.read(reinterpret_cast<char*>(&r), sizeof(unsigned char));
-        file.read(reinterpret_cast<char*>(&g), sizeof(unsigned char));
-        file.read(reinterpret_cast<char*>(&b), sizeof(unsigned char));
+        float x = 0, y = 0, z = 0;
+        unsigned char r = 255, g = 255, b = 255;
+        size_t offset = 0;
 
-        if (!file) {
-            std::cerr << "Error: Unexpected end of file reading vertex " << i << std::endl;
-            return false;
+        for (auto& prop : vertexProperties) {
+            const char* ptr = buffer.data() + offset;
+
+            if (prop.name == "x")
+                x = *reinterpret_cast<const float*>(ptr);
+            else if (prop.name == "y")
+                y = *reinterpret_cast<const float*>(ptr);
+            else if (prop.name == "z")
+                z = *reinterpret_cast<const float*>(ptr);
+            else if (prop.name == "red")
+                r = *reinterpret_cast<const unsigned char*>(ptr);
+            else if (prop.name == "green")
+                g = *reinterpret_cast<const unsigned char*>(ptr);
+            else if (prop.name == "blue")
+                b = *reinterpret_cast<const unsigned char*>(ptr);
+
+            offset += prop.size;
         }
 
         glm::vec3 position(x, y, z);
@@ -354,6 +421,7 @@ void Loader::swapBytes(char* data, int size)
 bool Loader::loadFromPLYFile(const std::string& filePath, std::vector<Point>& vertices, glm::vec3& minVertex, glm::vec3& maxVertex)
 {
 	std::ifstream file(filePath);
+	
 	//std::cout << std::filesystem::current_path() << filePath << "\n";
 	if (!file.is_open())
 	{
@@ -363,6 +431,7 @@ bool Loader::loadFromPLYFile(const std::string& filePath, std::vector<Point>& ve
 
 	std::string line;
 	std::getline(file, line);
+	
 	if (line != "ply")
 	{
 		std::cerr << "Error: Not a valid PLY file: " << filePath << std::endl;
@@ -392,78 +461,105 @@ bool Loader::loadFromPLYFile(const std::string& filePath, std::vector<Point>& ve
 }
 
 
-bool Loader::loadFromASCIIPLYFile(const std::string& filePath, std::vector<Point>& vertices, glm::vec3& minVertex, glm::vec3& maxVertex)
+bool Loader::loadFromASCIIPLYFile(
+    const std::string& filePath,
+    std::vector<Point>& vertices,
+    glm::vec3& minVertex,
+    glm::vec3& maxVertex)
 {
-	std::ifstream file(filePath);
-	if (!file.is_open())
-	{
-		std::cerr << "Error: Could not open PLY file: " << filePath << std::endl;
-		return false;
-	}
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open ASCII PLY file: " << filePath << std::endl;
+        return false;
+    }
 
-	// Variables para almacenar el n�mero de vertices y la posici�n actual en el archivo
-	int numVertices = -1;
-	int currentVertexIndex = 0;
+    std::string line;
+    int numVertices = 0;
+    bool inVertexSection = false;
+    std::vector<PLYProperty> vertexProperties;
 
-	std::string line;
-	while (std::getline(file, line))
-	{
-		std::istringstream iss(line);
-		std::string type;
-		iss >> type;
+    // --- Parse header ---
+    while (std::getline(file, line)) {
+        line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
+        std::istringstream iss(line);
+        std::string token;
+        iss >> token;
 
-		if (type == "element")
-		{
-			// Leer el n�mero de vertices del archivo
-			std::string elementType;
-			int count;
-			iss >> elementType >> count;
-			if (elementType == "vertex")
-			{
-				numVertices = count;
-			}
-		}
-		else if (type == "end_header")
-		{
-			// Despu�s de leer el header, se deben haber encontrado el n�mero de vertices
-			if (numVertices == -1)
-			{
-				std::cerr << "Error: Invalid PLY file format." << std::endl;
-				return false;
-			}
+        if (token == "element") {
+            std::string type;
+            int count;
+            iss >> type >> count;
 
-			// Leer los vertices del archivo
-			vertices.resize(numVertices);
-			for (int i = 0; i < numVertices; i++)
-			{
-				glm::vec3 vertex;
-				file >> vertex.x >> vertex.y >> vertex.z;
+            if (type == "vertex") {
+                numVertices = count;
+                inVertexSection = true;
+            } else {
+                inVertexSection = false;
+            }
+        }
+        else if (token == "property" && inVertexSection) {
+            std::string type, name;
+            iss >> type >> name;
 
-				// Actualizar las coordenadas m�nimas y m�ximas
-				if (i == 0)
-				{
-					minVertex = maxVertex = vertex;
-				}
-				else
-				{
-					minVertex = glm::min(minVertex, vertex);
-					maxVertex = glm::max(maxVertex, vertex);
-				}
+            vertexProperties.push_back({name, type, getTypeSize(type)});
+        }
+        else if (token == "end_header") {
+            break;
+        }
+    }
 
-				// Agregar el v�rtice al vector
-				Point p;
-				p.position = vertex;
-				p.color = glm::vec3(1.f, 0.f, 0.f);
-				vertices[i] = p;
+    if (numVertices == 0) {
+        std::cerr << "Error: No vertices found in ASCII PLY." << std::endl;
+        return false;
+    }
 
-				// Incrementar el �ndice actual del v�rtice
-				currentVertexIndex++;
-			}
-		}
-	}
+    vertices.resize(numVertices);
 
-	file.close();
-	return true;
+    // --- Read vertex lines ---
+    for (int i = 0; i < numVertices; i++) {
+        if (!std::getline(file, line)) {
+            std::cerr << "Error: Unexpected end of vertex data." << std::endl;
+            return false;
+        }
+
+        std::istringstream iss(line);
+
+        float x = 0, y = 0, z = 0;
+        int ri = 255, gi = 255, bi = 255;  // use ints here
+        size_t propIndex = 0;
+
+        for (auto& prop : vertexProperties) {
+            if (prop.name == "x") iss >> x;
+            else if (prop.name == "y") iss >> y;
+            else if (prop.name == "z") iss >> z;
+            else if (prop.name == "red") iss >> ri;
+            else if (prop.name == "green") iss >> gi;
+            else if (prop.name == "blue") iss >> bi;
+            else {
+                // skip unsupported properties
+                float dummy;
+                iss >> dummy;
+            }
+            propIndex++;
+        }
+
+        glm::vec3 position(x, y, z);
+        glm::vec3 color(ri / 255.0f, gi / 255.0f, bi / 255.0f);
+
+        if (i == 0)
+            minVertex = maxVertex = position;
+        else {
+            minVertex = glm::min(minVertex, position);
+            maxVertex = glm::max(maxVertex, position);
+        }
+
+        Point p;
+        p.position = position;
+        p.color = color;
+        vertices[i] = p;
+    }
+
+    return true;
 }
 
-#endif // LOADER_H
+#endif LOADER_H

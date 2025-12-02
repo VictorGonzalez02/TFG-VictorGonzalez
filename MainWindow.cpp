@@ -145,7 +145,7 @@ bool initializeGLEW() {
 
 // Set up necessary callbacks
 void setupCallbacks(GLFWwindow* window) {
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetCursorPosCallback(window, cursor_position_callback);
 }

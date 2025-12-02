@@ -92,6 +92,12 @@ void GUIRenderToy::renderMenus(GLWidget& glWidget)
                 glWidget.activateShader("ZTest", NULL);
             }
 
+            if (ImGui::MenuItem("ZTest_No_Depth", NULL, selectedShading == "ZTest_No_Depth")) {
+                selectedShading = "ZTest_No_Depth";
+                setup->selectedShader = 2;
+                glWidget.activateShader("ZTest_No_Depth", NULL);
+            }
+
             // Re-load shaders
             if (ImGui::MenuItem("Reload Shaders")) {
                 // TO DO: ara si el shading seleccionat és Texture no es deixa activat per que no 
@@ -138,6 +144,8 @@ void GUIRenderToy::renderControls(GLWidget& glWidget) {
                 1000.0f / ImGui::GetIO().Framerate, 
                 ImGui::GetIO().Framerate);
     ImGui::Text(" ");
+    std::cout << ImGui::GetIO().Framerate << std::endl;
+    fflush(stdout);
 
     // Render Mode Section
     ImGui::Separator(); 
@@ -153,6 +161,12 @@ void GUIRenderToy::renderControls(GLWidget& glWidget) {
     ImGui::SameLine();
     if (ImGui::RadioButton("Mesh", &renderMode, 3)) { glWidget.setRenderMode(renderMode); }
     
+    bool enabled = setup->glDepthTest;
+    if (ImGui::Checkbox("Enable GL_DEPTH_TEST", &enabled)) {
+        std::cout << "depth test state = " << setup->glDepthTest << std::endl;
+        setup->glDepthTest = enabled;
+        glWidget.updateDepthTest(enabled);
+    }
     // GPUMaterial Properties Section
     ImGui::Separator(); 
     ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "GPUMaterial de l'objecte"); 

@@ -34,10 +34,14 @@ void GLWidget::initializeGL()
 // Activa les característiques d'OpenGL que es faran servir
 void GLWidget::setupOpenGLFeatures()
 {
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glEnable(GL_RGBA);
     glEnable(GL_DOUBLE);
+}
+
+void GLWidget::updateDepthTest(bool b){
+    b ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 }
 
 // Inicialització de la geometria de l'escena i preparació per enviar-la a la GPU
@@ -65,19 +69,36 @@ void GLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Dibuixar l'escena
+    GLuint query;
+    glGenQueries(1, &query);
+
+    // Dibuixar l'escena (el shader GL_Points té id 3)
     if(program->getId() == 3){
+        glBeginQuery(GL_TIME_ELAPSED, query);
         world->draw();
+        glEndQuery(GL_TIME_ELAPSED);
     } else{
+        glBeginQuery(GL_TIME_ELAPSED, query);
         computePass();
         displayPass();
+        glEndQuery(GL_TIME_ELAPSED);
     }
+    /*GLint available = 0;
+    while (!available)
+        glGetQueryObjectiv(query, GL_QUERY_RESULT_AVAILABLE, &available);
+    GLuint64 ns;
+    glGetQueryObjectui64v(query, GL_QUERY_RESULT, &ns);
+    std::cout << ns / 1e6 << std::endl;*/
+
+    glDeleteQueries(1, &query);
+
 }
 
 void GLWidget::initShadersGPU()
 {
     shaderGL_Points = make_shared<GPUShader>("GL_Points", "vshader1.glsl", "fshader1.glsl");
     shaderZTest = make_shared<GPUShader>("ZTest", "cZTest.glsl");
+    shaderZTest_No_Depth = make_shared<GPUShader>("ZTest_No_Depth", "cZTestNoDepth.glsl");
     shaderZTestDisplay = make_shared<GPUShader>("ZTestDisplay", "vshader2.glsl", "fshader2.glsl");
 
     //this->shaders.push_back(new Shader(4, 5, "vertex_core.glsl", "fragment_core_Voxel_DDA.glsl"));
@@ -96,6 +117,11 @@ void GLWidget::activateShader(const char* typeShader, const char* nameTexture) {
         world->toGPU(program->getId());
     } else if (std::strcmp(typeShader, "ZTest")==0){
         program = shaderZTest;
+        program->use();
+        world->toGPU(program->getId());
+        setupBuffer();
+    } else if (std::strcmp(typeShader, "ZTest_No_Depth")==0){
+        program = shaderZTest_No_Depth;
         program->use();
         world->toGPU(program->getId());
         setupBuffer();
@@ -336,8 +362,6 @@ void GLWidget::setupBuffer(){
 }
 
 void GLWidget::computePass(){
-    //int numPoints = 983599;
-    //int numPoints = 3609600;
     int numPoints = world->getNumPoints();
     glUniform1ui(glGetUniformLocation(program->getId(), "imageWidth"), config.viewportWidth);
     glUniform1ui(glGetUniformLocation(program->getId(), "imageHeight"), config.viewportHeight);
@@ -352,6 +376,7 @@ void GLWidget::computePass(){
 }
 
 void GLWidget::displayPass(){
+    shared_ptr<GPUShader> compute_program = program;
     program = shaderZTestDisplay;
     program->use();
 
@@ -385,7 +410,7 @@ void GLWidget::displayPass(){
     glUniform1ui(glGetUniformLocation(program->getId(), "imageWidth"), config.viewportWidth);
     glBindVertexArray(fullscreenVAO);
     glDrawArrays(GL_TRIANGLES, 0, 3 * 2); // your fullscreen quad VAO
-    program = shaderZTest;
+    program = compute_program;
     program->use();
 }
 

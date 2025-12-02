@@ -54,6 +54,9 @@ public:
     
     // Camera update
     void updateCamera();
+
+    //GL_DEPTH_TEST update
+    void updateDepthTest(bool b);
     
     // Lights update
     void updateAllLights();
@@ -99,6 +102,7 @@ private:
 
     shared_ptr<GPUShader> shaderGL_Points;
     shared_ptr<GPUShader> shaderZTest;
+    shared_ptr<GPUShader> shaderZTest_No_Depth;
     shared_ptr<GPUShader> shaderZTestDisplay;
     shared_ptr<GPUShader> program; 
 

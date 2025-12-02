@@ -54,7 +54,8 @@ class GPUConfig {
       // Scene settings
      
       vec3 backgroundColor;
-      
+
+      bool glDepthTest;
 
       int selectedShader; // 0 = ColorShading, 1 = MaterialShading, 2 = NormalShading, 3= Gouraud, 4 = Phong, 5 = Texture
       int envMap; // 0 = No, 1 = CubMap, 2 = Reflexions, 3 = Transparencies
@@ -68,7 +69,7 @@ class GPUConfig {
             viewportHeight = wh;
             
             // Camera settings
-            observador = vec3(0.0f, 0.0f, 2.0f);
+            observador = vec3(0.0f, 50.0f, 50.0f);
             vrp = vec3(0.0f, 0.0f, 0.0f);
             vup = vec3(0.0f, 1.0f, 0.0f);
             fov = 90.0f;
@@ -117,6 +118,8 @@ class GPUConfig {
             // Scene settings
             backgroundColor = vec3(0.9f, 0.9f, 0.95f);
 
+            glDepthTest = false;
+
             selectedShader = 0; 
             envMap = 0; //0- No, 1- CubMap, 2- Reflexions, 3- Transparencies
         }
@@ -156,6 +159,8 @@ class GPUConfig {
           ty = other.ty;
           
           backgroundColor = other.backgroundColor;
+
+          glDepthTest = false;
                           
           selectedShader = other.selectedShader;
           envMap = other.envMap;
@@ -200,6 +205,8 @@ class GPUConfig {
                 ty = other.ty;
                 
                 backgroundColor = other.backgroundColor;
+
+                glDepthTest = other.glDepthTest;
                 
                 selectedShader = other.selectedShader;
                 envMap = other.envMap;
