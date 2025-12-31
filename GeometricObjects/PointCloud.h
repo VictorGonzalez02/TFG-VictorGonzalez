@@ -496,8 +496,7 @@ public:
 		this->initVariables(minVertex, maxVertex, totalSize, scale);
 		this->populateImage();
 		//this->initPointCloudAs3DTexture();
-
-		for (int i = 0; i < vertices.size(); i++) {
+		/*for (int i = 0; i < vertices.size(); i++) {
 			// Verificar si el vértice tiene un cero en la tercera componente de 'labels'
 			if (vertices[i].labels.z == 0.0f) {
 				// Añadir el vértice a la variable 'verticesError'
@@ -507,7 +506,7 @@ public:
 				vertices.erase(vertices.begin() + i);
 				i--; // Descontar la posición porque el vector se acorta
 			}
-		}
+		}*/
 		
 
 		//this->octree = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->vertices, 2);

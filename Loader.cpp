@@ -171,118 +171,65 @@ bool Loader::loadFromOBJFile(const std::string& filePath, std::vector<Point>& ve
 	return true;
 }
 
+inline float swapFloatBE(float v)
+{
+    uint32_t i = __builtin_bswap32(*reinterpret_cast<uint32_t*>(&v));
+    return *reinterpret_cast<float*>(&i);
+}
+
 bool Loader::loadFromBigEndianPLYFile(const std::string& filePath, std::vector<Point>& vertices, glm::vec3& minVertex, glm::vec3& maxVertex)
 {
 	std::ifstream file(filePath, std::ios::binary);
-	if (!file.is_open())
-	{
-		std::cerr << "Error: Could not open PLY file: " << filePath << std::endl;
-		return false;
-	}
+    if (!file) return false;
 
-	int numVertices = -1;
+    std::string line;
+    int numVertices = 0;
+    int numFaces = 0;
 
-	std::unordered_map<double, int> lCounts; // Diccionario para contar los valores de "l"
-	std::unordered_map<double, int> pCounts; // Diccionario para contar los valores de "p"
+    // ---------- Header ----------
+    while (std::getline(file, line)) {
+        if (line.rfind("element vertex", 0) == 0)
+            numVertices = std::stoi(line.substr(15));
+        else if (line.rfind("element face", 0) == 0)
+            numFaces = std::stoi(line.substr(13));
+        else if (line == "end_header")
+            break;
+    }
 
-	std::string line;
-	while (std::getline(file, line))
-	{
-		std::istringstream iss(line);
-		std::string type;
-		iss >> type;
+    vertices.resize(numVertices);
 
-		if (type == "element")
-		{
-			std::string elementType;
-			int count;
-			iss >> elementType >> count;
-			if (elementType == "vertex")
-			{
-				numVertices = count;
-			}
-		}
-		else if (type == "end_header")
-		{
-			if (numVertices == -1)
-			{
-				std::cerr << "Error: Invalid PLY file format." << std::endl;
-				return false;
-			}
+    // ---------- Vertices ----------
+    for (int i = 0; i < numVertices; ++i) {
+        float x, y, z;
+        unsigned char r, g, b;
 
-			vertices.resize(numVertices);
-			file.seekg(0, std::ios_base::cur);
-			for (int i = 0; i < numVertices; i++)
-			{
-				file.seekg(0, std::ios_base::cur);
+        file.read(reinterpret_cast<char*>(&x), 4);
+        file.read(reinterpret_cast<char*>(&y), 4);
+        file.read(reinterpret_cast<char*>(&z), 4);
+        file.read(reinterpret_cast<char*>(&r), 1);
+        file.read(reinterpret_cast<char*>(&g), 1);
+        file.read(reinterpret_cast<char*>(&b), 1);
 
-				float x, y, z;
-				bool error;
-				file.read(reinterpret_cast<char*>(&x), sizeof(float));
-				file.read(reinterpret_cast<char*>(&y), sizeof(float));
-				file.read(reinterpret_cast<char*>(&z), sizeof(float));
+        x = swapFloatBE(x);
+        y = swapFloatBE(y);
+        z = swapFloatBE(z);
 
-				if (!isBigEndian())
-				{
-					swapBytes(reinterpret_cast<char*>(&x), sizeof(float));
-					swapBytes(reinterpret_cast<char*>(&y), sizeof(float));
-					swapBytes(reinterpret_cast<char*>(&z), sizeof(float));
-				}
+        glm::vec3 pos(x, y, z);
 
-				glm::vec3 vertex(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
+        if (i == 0)
+            minVertex = maxVertex = pos;
+        else {
+            minVertex = glm::min(minVertex, pos);
+            maxVertex = glm::max(maxVertex, pos);
+        }
 
-				if (i == 0)
-				{
-					minVertex = maxVertex = vertex;
-				}
-				else
-				{
-					minVertex = glm::min(minVertex, vertex);
-					maxVertex = glm::max(maxVertex, vertex);
-				}
+        vertices[i].position = pos;
+        vertices[i].color = glm::vec3(r, g, b) * (1.0f / 255.0f);
+    }
 
-				Point point;
-				point.position = vertex;
-				/*point.labels = glm::vec3(l, p, l==p);
-				if (p != l)
-				{
-					//point.color = getColor(0);
-				}
-				else
-				{
-					//point.color = getColor(1);
-				}*/
-				point.color = glm::vec3(1.f, 0.f, 0.f);
-				//point.normal = getColor(p);//glm::vec3(1.f, 0.f, 0.f);
-				vertices[i] = point;
-
-				//file.seekg(sizeof(double), std::ios_base::cur);
-
-				// Contar los valores distintos de "l"
-				/*if (lCounts.find(l) != lCounts.end())
-				{
-					lCounts[l]++;
-				}
-				else
-				{
-					lCounts[l] = 1;
-				}
-
-				// Contar los valores distintos de "p"
-				if (pCounts.find(p) != pCounts.end())
-				{
-					pCounts[p]++;
-				}
-				else
-				{
-					pCounts[p] = 1;
-				}*/
-			}
-		}
-	}
 
 	file.close();
-	return true;
+    return true;
 }
 
 bool Loader::loadFromLittleEndianPLYFile(

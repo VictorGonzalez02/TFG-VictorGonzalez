@@ -28,12 +28,8 @@ bool less64(uvec2 a, uvec2 b) {
 
 void atomicNewVal(uint idx, uvec2 newVal)
 {
-    for (;;) {
-        uint swapped = atomicExchange(framebuffer[idx].x, newVal.x);
-        uint swappedHigh = atomicExchange(framebuffer[idx].y, newVal.y);
-        return;
-        // If race detected, loop again
-    }
+    uint swapped = atomicExchange(framebuffer[idx].x, newVal.x);
+    uint swappedHigh = atomicExchange(framebuffer[idx].y, newVal.y);
 }
 
 void main() {

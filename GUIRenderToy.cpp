@@ -294,12 +294,12 @@ void GUIRenderToy::renderControls(GLWidget& glWidget) {
         glWidget.updateCamera();
     }
     
-    if (ImGui::SliderFloat3("Observador", camPos, -50.0f, 50.0f)) {
+    if (ImGui::SliderFloat3("Observador", camPos, -100.0f, 100.0f)) {
         setup.observador = vec3(camPos[0], camPos[1], camPos[2]);
         glWidget.updateCamera();
     }
     
-    if (ImGui::SliderFloat3("VRP", vrpPos, -50.0f, 50.0f)) {
+    if (ImGui::SliderFloat3("VRP", vrpPos, -100.0f, 100.0f)) {
         setup.vrp = vec3(vrpPos[0], vrpPos[1], vrpPos[2]);
         glWidget.updateCamera();
     }
