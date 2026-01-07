@@ -74,7 +74,7 @@ class GPUConfig {
             vup = vec3(0.0f, 1.0f, 0.0f);
             fov = 90.0f;
             zNear = 0.1f;
-            zFar = 100.0f;
+            zFar = 1000.0f;
             
             // Light settings
             maxLights = 8; // Allow up to 8 lights
