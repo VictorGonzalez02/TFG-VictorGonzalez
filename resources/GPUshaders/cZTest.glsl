@@ -33,17 +33,14 @@ void atomicMin64(uint idx, uvec2 newVal)
         uvec2 old = framebuffer[idx];
         if (!less64(newVal, old)) return;
 
-        // Try atomic swap on low word
         uint oldLow = old.x;
         uint swapped = atomicCompSwap(framebuffer[idx].x, oldLow, newVal.x);
         if (swapped == oldLow) {
-            // Now try high word (depth)
             uint oldHigh = old.y;
             uint swappedHigh = atomicCompSwap(framebuffer[idx].y, oldHigh, newVal.y);
             if (swappedHigh == oldHigh)
                 return;
         }
-        // If race detected, loop again
     }
 }
 
