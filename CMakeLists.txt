@@ -38,12 +38,10 @@ file(GLOB SOURCES
 # Find Packages
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
-find_package(glfw3 REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(soil2 CONFIG REQUIRED)
 
-find_package(PkgConfig REQUIRED)
-
-# find the GLFW package
-pkg_search_module(GLFW REQUIRED glfw3)
 
 # Paths per a Homebrew (macOS)
 if(APPLE)
@@ -71,8 +69,10 @@ include_directories (
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME}
-    ${GLEW_LIBRARIES}
-    ${GLFW_LIBRARIES}
-    ${OPENGL_LIBRARIES}
+    OpenGL::GL
+    GLEW::GLEW
+    glfw
+    glm::glm
+    soil2
 )
 

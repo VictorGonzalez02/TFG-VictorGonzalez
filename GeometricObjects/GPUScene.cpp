@@ -4,7 +4,7 @@ GPUScene::GPUScene()
 {
     objects.clear();
     pointCloud = nullptr;
-    pointCloud = new PointCloud(1, "/home/victor/TFG-VictorGonzalez/resources/OBJFiles/Goat Morton.ply");
+    //pointCloud = new PointCloud(1, "/home/victor/TFG-VictorGonzalez/resources/OBJFiles/Goat Morton.ply");
    
 }
 /**

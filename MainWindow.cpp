@@ -129,7 +129,7 @@ GLFWwindow* createWindow(int width, int height, const char* title) {
     }
     
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    glfwSwapInterval(0); // Enable vsync
     
     return window;
 }

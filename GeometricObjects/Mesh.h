@@ -182,19 +182,7 @@ public:
 		this->updateModelMatrix();
 	}
 
-	~Mesh()
-	{
-		glDeleteVertexArrays(1, &this->VAO);
-		glDeleteBuffers(1, &this->VBO);
-
-		if (this->nrOfIndices > 0)
-		{
-			glDeleteBuffers(1, &this->EBO);
-		}
-
-		delete[] this->vertexArray;
-		delete[] this->indexArray;
-	}
+	~Mesh();
 
 	//Accessors
 
