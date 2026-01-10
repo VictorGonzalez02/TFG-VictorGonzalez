@@ -2,7 +2,7 @@
 #include <iostream>
 
 //Struct per a passar dades a la GPU
-struct {
+static struct {
     GLuint Ia;
     GLuint Id;
     GLuint Is;

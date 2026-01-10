@@ -1,6 +1,6 @@
 #include "GPUMaterial.hpp"
 
-struct {
+static struct {
     GLuint Ka;
     GLuint Kd;
     GLuint Ks;

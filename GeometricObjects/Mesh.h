@@ -182,7 +182,7 @@ public:
 		this->updateModelMatrix();
 	}
 
-	~Mesh();
+	virtual ~Mesh();
 
 	//Accessors
 

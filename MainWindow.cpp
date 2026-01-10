@@ -97,6 +97,8 @@ int main(int argc, char *argv[])
     // Clean up
     cleanup(window, gui);
 
+    std::cout << "\nPulsa ENTER para salir...";
+    std::cin.get();
     return 0;
 }
 

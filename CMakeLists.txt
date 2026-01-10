@@ -1,21 +1,21 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(P2-GPUToy VERSION 1.0 LANGUAGES CXX)
+project(TFG-VictorGonzalez VERSION 1.0 LANGUAGES CXX)
 
 # Configuració de C++11
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Add a compiler flag
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fPIC -Wno-deprecated-declarations")
+if (MSVC)
+    add_compile_options(/W4)
+else()
+    add_compile_options(-Wall -Wno-deprecated-declarations -fPIC)
+endif()
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 cmake_policy(SET CMP0100 NEW)
-# Make this a GUI application on Windows
-if(WIN32)
-    set(CMAKE_WIN32_EXECUTABLE ON)
-endif()
 
 # Afegir fitxers del projecte
 # Afegir els fitxers font

@@ -1,6 +1,6 @@
 #include "Lights/GPULight.hpp"
 
-struct {
+static struct {
     GLuint Ia;
     GLuint Id;
     GLuint Is;

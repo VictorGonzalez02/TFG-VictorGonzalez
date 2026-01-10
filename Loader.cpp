@@ -4,6 +4,17 @@
 #include "Loader.h"
 #include <unordered_map>
 #include <filesystem>
+#include <cstdint>
+
+
+static inline uint32_t bswap32(uint32_t x) {
+#if defined(_MSC_VER)
+    return _byteswap_ulong(x);
+#else
+    return bswap32(x);
+#endif
+}
+
 
 struct PLYProperty {
     std::string name;
@@ -173,7 +184,7 @@ bool Loader::loadFromOBJFile(const std::string& filePath, std::vector<Point>& ve
 
 inline float swapFloatBE(float v)
 {
-    uint32_t i = __builtin_bswap32(*reinterpret_cast<uint32_t*>(&v));
+    uint32_t i = bswap32(*reinterpret_cast<uint32_t*>(&v));
     return *reinterpret_cast<float*>(&i);
 }
 
