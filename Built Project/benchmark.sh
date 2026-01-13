@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 PROGRAM="./TFG-VictorGonzalez"   # ruta a tu ejecutable
-TOTAL_TIME=45
-WARMUP_TIME=15
+TOTAL_TIME=30
+WARMUP_TIME=10
 OUTPUT_FILE="average_result.txt"  # archivo donde se guardará la media
 
 TMP_FILE=$(mktemp)
