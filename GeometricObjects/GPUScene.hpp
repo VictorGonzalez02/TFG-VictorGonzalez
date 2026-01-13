@@ -7,6 +7,7 @@
 #include "GeometricObjects/Mesh.hpp"
 #include "GeometricObjects/Cub.hpp"
 #include "GeometricObjects/GPUMaterial.hpp"
+#include "GeometricObjects/PointCloud.h"
 
 using namespace std;
 
@@ -21,14 +22,23 @@ public:
 
     // Vector d'objectes continguts a l'escena
     std::vector<shared_ptr<Object>> objects;
+    PointCloud* pointCloud;
     std::vector<shared_ptr<Object>> getObjects() {return objects;}
+
     void   addObject(shared_ptr<Object> obj);
+    void addPointCloud(PointCloud* p);
 
     void setMaterial(shared_ptr<GPUMaterial> m);
     void lastObjectToGPU(GLuint program);
     
     void toGPU (GLuint p) override;
+    void toGPU_PointCloud (GLuint p);
     void draw() override;  
+    void drawPointCloud();
+
+    int getNumPoints(){
+        return pointCloud->getNumPoints();
+    }
 
     void toGPUTexture(GLuint p);
 

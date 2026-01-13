@@ -84,6 +84,8 @@ int main(int argc, char *argv[])
         glWidget.paintGL();
         
         ImGui::End();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
         // Refresh ImGui
         refreshGUI();
@@ -111,8 +113,8 @@ bool initializeGLFW() {
 // Create and configure window
 GLFWwindow* createWindow(int width, int height, const char* title) {
     // Configure OpenGL 3.3 Core Profile
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -127,7 +129,7 @@ GLFWwindow* createWindow(int width, int height, const char* title) {
     }
     
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    glfwSwapInterval(0); // Enable vsync
     
     return window;
 }
@@ -143,7 +145,7 @@ bool initializeGLEW() {
 
 // Set up necessary callbacks
 void setupCallbacks(GLFWwindow* window) {
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetCursorPosCallback(window, cursor_position_callback);
 }

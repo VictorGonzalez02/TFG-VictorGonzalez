@@ -16,6 +16,7 @@ class GPUShader {
 
     public: 
         GPUShader(const char *name, const char *vertexPath, const char *fragmentPath);
+        GPUShader(const char *name, const char *computePath);
         ~GPUShader();
 
         GLuint getId() { return program; }
@@ -24,6 +25,7 @@ class GPUShader {
 
     // Funcions de suport a la càrrega dels shaders
         GLuint      initShader(const char* vname, const char* fname); // crea un programa amb dos shaders
+        GLuint      initComputeShader(const char *cname);
         GLuint      compileShader(GLenum shaderType, const std::string& source, const std::string& typeName); 
         
         std::string readShaderSource(const std::string& filePath);

@@ -40,6 +40,7 @@ public:
     void setCamera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float dant, float dpost, float aspectRatio);
 
     void updateCamera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float dant, float dpost);
+    void updateCameraVectors(GLfloat yaw, GLfloat pitch);
     void setObservador(vec3 lookfrom, vec3 lookat, vec3 vup);
 
     
@@ -75,6 +76,8 @@ public:
     double angY;
     double angZ;
     vec3   u, v, w;   // sistema de referencia de la camera
+    GLfloat yaw;
+	GLfloat pitch;
 
     TipProj typeProjection;
     // Plans de clipping anterior i posterior

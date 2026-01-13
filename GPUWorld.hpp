@@ -21,6 +21,7 @@ public:
     shared_ptr<GPULightsManager> lightsManager;
     // Camera 
     shared_ptr<GPUCamera> camera;
+
  
     // Configuracio de la visualitzacio
     shared_ptr<GPUConfig> setup;
@@ -36,6 +37,7 @@ public:
     
     void addLight(shared_ptr<GPUPointLight> l) { lightsManager->addLight(l); }
     void addObject (shared_ptr<Object> obj) { scene->addObject(obj);}
+    void addPointCloud(PointCloud* p){ scene->addPointCloud(p);}
 
     void updateAmbientLight(GLuint program, vec3 ambient) { 
         lightsManager->ambientLightToGPU(program, ambient);
@@ -63,10 +65,18 @@ public:
         scene->lastObjectToGPU(program);
     }
     void toGPU(GLuint program) override;
+    void toGPU_PointCloud(GLuint program);
 
     void draw() override {
         scene->draw();
     };
+    void drawPointCloud(){
+        scene->drawPointCloud();
+    }
+
+    int getNumPoints(){
+        return scene->getNumPoints();
+    }
 
     void toGPUTexture(GLuint program);
     bool isTextured() { return scene->isTextured(); };

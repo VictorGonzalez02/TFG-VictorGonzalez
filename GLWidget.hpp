@@ -54,6 +54,9 @@ public:
     
     // Camera update
     void updateCamera();
+
+    //GL_DEPTH_TEST update
+    void updateDepthTest(bool b);
     
     // Lights update
     void updateAllLights();
@@ -70,8 +73,13 @@ public:
 
     // Funcions de càrrega d'objectes
     void loadObject(const char* filename) ;
+    void loadPointCloud(const char* filename);
     void addCube();
     void reset();
+
+    void setupBuffer();
+    void computePass();
+    void displayPass();
 
 private:
 
@@ -92,7 +100,12 @@ private:
 
     // Shaders
 
-    Shader* program;
+    shared_ptr<GPUShader> shaderGL_Points;
+    shared_ptr<GPUShader> shaderZTest;
+    shared_ptr<GPUShader> shaderZTest_No_Depth;
+    shared_ptr<GPUShader> shaderZTestDisplay;
+    shared_ptr<GPUShader> program; 
+
     std::vector<Shader*> shaders;       
 
     // Mouse control

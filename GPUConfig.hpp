@@ -54,7 +54,8 @@ class GPUConfig {
       // Scene settings
      
       vec3 backgroundColor;
-      
+
+      bool glDepthTest;
 
       int selectedShader; // 0 = ColorShading, 1 = MaterialShading, 2 = NormalShading, 3= Gouraud, 4 = Phong, 5 = Texture
       int envMap; // 0 = No, 1 = CubMap, 2 = Reflexions, 3 = Transparencies
@@ -68,12 +69,12 @@ class GPUConfig {
             viewportHeight = wh;
             
             // Camera settings
-            observador = vec3(0.0f, 0.0f, 2.0f);
+            observador = vec3(0.0f, 50.0f, 50.0f);
             vrp = vec3(0.0f, 0.0f, 0.0f);
             vup = vec3(0.0f, 1.0f, 0.0f);
             fov = 90.0f;
             zNear = 0.1f;
-            zFar = 100.0f;
+            zFar = 1000.0f;
             
             // Light settings
             maxLights = 8; // Allow up to 8 lights
@@ -108,7 +109,7 @@ class GPUConfig {
             // Input controls
             mouseMode = 1;   // 0 - translate, 1 -  rotate
             
-            sensitivityAmount = 0.5f;
+            sensitivityAmount = 0.3f;
             
             // Transformation
             sx = sy = 1.0f;
@@ -116,6 +117,8 @@ class GPUConfig {
 
             // Scene settings
             backgroundColor = vec3(0.9f, 0.9f, 0.95f);
+
+            glDepthTest = false;
 
             selectedShader = 0; 
             envMap = 0; //0- No, 1- CubMap, 2- Reflexions, 3- Transparencies
@@ -156,6 +159,8 @@ class GPUConfig {
           ty = other.ty;
           
           backgroundColor = other.backgroundColor;
+
+          glDepthTest = false;
                           
           selectedShader = other.selectedShader;
           envMap = other.envMap;
@@ -200,6 +205,8 @@ class GPUConfig {
                 ty = other.ty;
                 
                 backgroundColor = other.backgroundColor;
+
+                glDepthTest = other.glDepthTest;
                 
                 selectedShader = other.selectedShader;
                 envMap = other.envMap;

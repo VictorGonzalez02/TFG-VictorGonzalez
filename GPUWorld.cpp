@@ -11,6 +11,13 @@ void GPUWorld::toGPU(GLuint program) {
     lightsManager->toGPU(program);
 }
 
+void GPUWorld::toGPU_PointCloud(GLuint program) {
+    scene->toGPU_PointCloud(program);
+    camera->toGPU(program);
+    lightsManager->toGPU(program);
+    //lightsManager->globalLightToGPU(program); //TO DO
+}
+
 void GPUWorld::toGPUTexture(GLuint program) {
     scene->toGPUTexture(program);
     camera->toGPU(program);

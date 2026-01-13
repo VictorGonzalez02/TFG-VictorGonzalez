@@ -1,4 +1,5 @@
 #include "Shader.h";
+#include <filesystem>
 
 std::string Shader::loadShaderSource(const char* fileName)
 {
@@ -8,7 +9,7 @@ std::string Shader::loadShaderSource(const char* fileName)
 	std::ifstream in_file;
 	std::string filePath = fileName;
 	filePath = "resources/GPUshaders/" + filePath;
-
+	//std::cout << std::filesystem::current_path() << filePath << "\n";
 	in_file.open(filePath);
 
 	if (in_file.is_open())

@@ -1,7 +1,7 @@
 #include "GUIRenderToy.hpp"
 
 GUIRenderToy::GUIRenderToy()
-    : fileObj(false), fileTexture(false), setup(nullptr), selectedShading("Color"), envMap("CubeMap") {
+    : fileObj(false), fileTexture(false), setup(nullptr), selectedShading("GL_Points"), envMap("CubeMap") {
 }
 
 GUIRenderToy::~GUIRenderToy() {
@@ -62,6 +62,12 @@ void GUIRenderToy::renderMenus(GLWidget& glWidget)
                 fileObj = true;
                 openFileDialog(".obj");
             }
+            if (ImGui::MenuItem("Open Pointcloud....")) {
+                // Aquí pots guardar la renderització
+                std::cout << "Obrint fitxer ply..." << std::endl;
+                filePointCloud = true;
+                openFileDialog(".ply");
+            }
             if (ImGui::MenuItem("Reset Scene")) {
                 // Aquí pots guardar la renderització
                 std::cout << "Reset..." << std::endl;
@@ -73,62 +79,30 @@ void GUIRenderToy::renderMenus(GLWidget& glWidget)
 
         // Shadings menu
         if (ImGui::BeginMenu("Shadings")) {
-            // Color shader option
-            if (ImGui::MenuItem("Color", NULL, selectedShading == "Color")) {
-                selectedShading = "Color";
+            
+            if (ImGui::MenuItem("GL_Points", NULL, selectedShading == "GL_Points")) {
+                selectedShading = "GL_Points";
                 setup->selectedShader = 0;
-                glWidget.activateShader("Color", NULL);
+                glWidget.activateShader("GL_Points", NULL);
             }
-            // Color shader option
-            if (ImGui::MenuItem("Material", NULL, selectedShading == "Material")) {
-                selectedShading = "Material";
+
+            if (ImGui::MenuItem("ZTest", NULL, selectedShading == "ZTest")) {
+                selectedShading = "ZTest";
                 setup->selectedShader = 1;
-                glWidget.activateShader("Material", NULL);
-            }// Color shader option
-            if (ImGui::MenuItem("Normal", NULL, selectedShading == "Normal")) {
-                selectedShading = "Normal";
+                glWidget.activateShader("ZTest", NULL);
+            }
+
+            if (ImGui::MenuItem("ZTest_No_Depth", NULL, selectedShading == "ZTest_No_Depth")) {
+                selectedShading = "ZTest_No_Depth";
                 setup->selectedShader = 2;
-                glWidget.activateShader("Normal", NULL);
-            }
-            // Color shader option
-            if (ImGui::MenuItem("Gouraud", NULL, selectedShading == "Gouraud")) {
-                selectedShading = "Gouraud";
-                setup->selectedShader = 3;
-                glWidget.activateShader("Gouraud", NULL);
-            }
-            // Color shader option
-            if (ImGui::MenuItem("Phong", NULL, selectedShading == "Phong")) {
-                selectedShading = "Phong";
-                setup->selectedShader = 4;
-                glWidget.activateShader("Phong", NULL);
-            }
-
-            // Texture shader option
-            if (ImGui::MenuItem("Texture", NULL, selectedShading == "Texture")) {
-                selectedShading = "Texture";
-                setup->selectedShader = 5;
-                fileTexture = true;
-                openFileDialog(".png,.jpg,.jpeg,.tga,.bmp");
-            }
-
-            //Toon shader option
-            if (ImGui::MenuItem("Toon", NULL, selectedShading == "Toon")) {
-                selectedShading = "Toon";
-                setup->selectedShader = 6;
-                glWidget.activateShader("Toon", NULL);
-            }
-
-            if (ImGui::MenuItem("Voxel", NULL, selectedShading == "Voxel")) {
-                selectedShading = "Voxel";
-                setup->selectedShader = 7;
-                glWidget.activateShader("Voxel", NULL);
+                glWidget.activateShader("ZTest_No_Depth", NULL);
             }
 
             // Re-load shaders
             if (ImGui::MenuItem("Reload Shaders")) {
                 // TO DO: ara si el shading seleccionat és Texture no es deixa activat per que no 
                 // es pot carregar sense un fitxer de textura. 
-                if (setup->selectedShader == 5) selectedShading = "Color";
+                if (setup->selectedShader == 5) selectedShading = "GL_Points";
                 glWidget.initShadersGPU();
                 setup->selectedShader = 0;
                 glWidget.activateShader(selectedShading.c_str(), NULL);
@@ -170,6 +144,8 @@ void GUIRenderToy::renderControls(GLWidget& glWidget) {
                 1000.0f / ImGui::GetIO().Framerate, 
                 ImGui::GetIO().Framerate);
     ImGui::Text(" ");
+    std::cout << ImGui::GetIO().Framerate << std::endl;
+    fflush(stdout);
 
     // Render Mode Section
     ImGui::Separator(); 
@@ -185,6 +161,12 @@ void GUIRenderToy::renderControls(GLWidget& glWidget) {
     ImGui::SameLine();
     if (ImGui::RadioButton("Mesh", &renderMode, 3)) { glWidget.setRenderMode(renderMode); }
     
+    bool enabled = setup->glDepthTest;
+    if (ImGui::Checkbox("Enable GL_DEPTH_TEST", &enabled)) {
+        std::cout << "depth test state = " << setup->glDepthTest << std::endl;
+        setup->glDepthTest = enabled;
+        glWidget.updateDepthTest(enabled);
+    }
     // GPUMaterial Properties Section
     ImGui::Separator(); 
     ImGui::TextColored(ImVec4(0.0f, 1.0f, 1.0f, 1.0f), "GPUMaterial de l'objecte"); 
@@ -312,12 +294,12 @@ void GUIRenderToy::renderControls(GLWidget& glWidget) {
         glWidget.updateCamera();
     }
     
-    if (ImGui::SliderFloat3("Observador", camPos, -20.0f, 20.0f)) {
+    if (ImGui::SliderFloat3("Observador", camPos, -100.0f, 100.0f)) {
         setup.observador = vec3(camPos[0], camPos[1], camPos[2]);
         glWidget.updateCamera();
     }
     
-    if (ImGui::SliderFloat3("VRP", vrpPos, -20.0f, 20.0f)) {
+    if (ImGui::SliderFloat3("VRP", vrpPos, -100.0f, 100.0f)) {
         setup.vrp = vec3(vrpPos[0], vrpPos[1], vrpPos[2]);
         glWidget.updateCamera();
     }
@@ -467,7 +449,13 @@ void GUIRenderToy::handleFileDialogResult(GLWidget& glWidget) {
                 std::cout << "Fitxer OBJ seleccionat: " << selectedFile << std::endl;
                 glWidget.loadObject(selectedFile.c_str());
                 fileObj = false;
-            } else {
+            } else if (filePointCloud) {
+                // Load the selected PLY file
+                std::cout << "Fitxer PLY seleccionat: " << selectedFile << std::endl;
+                glWidget.loadPointCloud(selectedFile.c_str());
+                glWidget.activateShader("GL_Points", NULL);
+                filePointCloud = false;
+            }else {
                 if (fileTexture) {
                     // Load the selected texture file
                     std::cout << "Fitxer de textura seleccionat: " << selectedFile << std::endl;

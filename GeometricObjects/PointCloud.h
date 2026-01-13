@@ -6,7 +6,7 @@
 #include <tuple>
 
 #include"Vertex.h"
-#include"Shader.h"
+#include"Utilities/Shader.h"
 #include"Material.h"
 #include "Primitives.h"
 #include "Octree.h"
@@ -23,6 +23,12 @@ private:
 	Vertex* vertexArray;
 	std::vector<std::vector<std::vector<std::vector<GLubyte>>>> image;
 	unsigned nrOfVertices;
+
+	std::vector<glm::vec4> pointCloudVertices;
+	std::vector<glm::vec4> pointCloudColors;
+	GLuint  VAO;
+    GLuint  vertex_buffer, color_buffer;
+	GLuint program;
 
 	int totalSize;
 
@@ -138,6 +144,13 @@ private:
 
 		}
 		this->image = image;
+	}
+
+	void make(){
+		for(int i = 0; i < vertices.size(); i++){
+			pointCloudVertices.push_back(vec4(vertices.at(i).position, 1.0));
+			pointCloudColors.push_back(vec4(vertices.at(i).color, 1.0));
+		}
 	}
 
 	void initSSBO()
@@ -452,7 +465,7 @@ public:
 
 		// Determine file extension
 		std::string extension = filePath.substr(filePath.find_last_of(".") + 1);
-
+		//std::cout << extension << "\n";
 		if (extension == "obj")
 		{
 			if (!Loader::loadFromOBJFile(filePath, this->vertices, minVertex, maxVertex))
@@ -482,9 +495,8 @@ public:
 		//Iniciamos variables
 		this->initVariables(minVertex, maxVertex, totalSize, scale);
 		this->populateImage();
-		this->initPointCloudAs3DTexture();
-
-		for (int i = 0; i < vertices.size(); i++) {
+		//this->initPointCloudAs3DTexture();
+		/*for (int i = 0; i < vertices.size(); i++) {
 			// Verificar si el vértice tiene un cero en la tercera componente de 'labels'
 			if (vertices[i].labels.z == 0.0f) {
 				// Añadir el vértice a la variable 'verticesError'
@@ -494,23 +506,24 @@ public:
 				vertices.erase(vertices.begin() + i);
 				i--; // Descontar la posición porque el vector se acorta
 			}
-		}
+		}*/
 		
 
-		this->octree = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->vertices, 2);
-		this->multiOctree = new MultiOctree(this->octree);
+		//this->octree = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->vertices, 2);
+		//this->multiOctree = new MultiOctree(this->octree);
 		
-		this->octreeError = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->verticesError,2);
-		this->multiOctree->mergeOctree(octreeError);
+		//this->octreeError = new Octree(this->uMinVertex, this->uMaxVertex, 8, this->verticesError,2);
+		//this->multiOctree->mergeOctree(octreeError);
 
-		this->initSSBO();
+		//this->initSSBO();
 		//this->initPointCloudAsOctree();
 		//this->initPointCloudErrorAsOctree();
-		this->initPointCloudAsMultiOctree();
-		std::vector<OctreeNode*> a = this->octree->getLeafNodes();
+		//this->initPointCloudAsMultiOctree();
+		//std::vector<OctreeNode*> a = this->octree->getLeafNodes();
 
 		//this->populateImage(this->vertices, totalSize);
 
+		this->make();
 		//this->initPointCloudAs3DTexture();
 	}
 
@@ -570,7 +583,8 @@ public:
 
 	void bind3DTexture()
 	{
-		glActiveTexture(GL_TEXTURE7);
+		//glActiveTexture(GL_TEXTURE7);
+		glActiveTexture(0);
 		glBindTexture(GL_TEXTURE_3D, this->id);
 	};
 
@@ -727,7 +741,7 @@ public:
 	void addRadius(const float& dt)
 	{	
 		float newRad = this->radius + dt;
-		newRad = max(0.01f, min(newRad, 10.0f));
+		newRad = std::max(0.01f, std::min(newRad, 10.0f));
 		this->radius = newRad;
 		
 	}
@@ -737,6 +751,9 @@ public:
 		return (this->uMaxVertex + this->uMinVertex) / 2.0f;
 	}
 	
+	int getNumPoints(){
+		return pointCloudVertices.size();
+	}
 
 	void SetMinVertex(const glm::vec3& minVertex) {
 		uMinVertex = minVertex;
@@ -754,5 +771,65 @@ public:
 		return uMaxVertex;
 	}
 
-	
+	void toGPU(GLuint p){
+
+		program = p;
+
+		if(program == 3){
+			glGenVertexArrays(1, &VAO);
+			glGenBuffers(1, &vertex_buffer);
+			glGenBuffers(1, &color_buffer);
+
+			glBindVertexArray(VAO);
+			// Bind vertices to layout location 0
+			glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer );
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * pointCloudVertices.size(), &pointCloudVertices[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(0); // This allows usage of layout location 0 in the vertex shader
+			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+
+			// Bind normals to layout location 1
+			glBindBuffer(GL_ARRAY_BUFFER, color_buffer );
+			glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * pointCloudColors.size(), &pointCloudColors[0], GL_STATIC_DRAW);
+			glEnableVertexAttribArray(1); // This allows usage of layout location 1 in the vertex shader
+			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindVertexArray(0);
+		} else{
+			GLuint posSSBO, colorSSBO;
+			// positions
+			glGenBuffers(1, &posSSBO);
+			glBindBuffer(GL_SHADER_STORAGE_BUFFER, posSSBO);
+			glBufferData(GL_SHADER_STORAGE_BUFFER,
+						pointCloudVertices.size() * sizeof(glm::vec4),
+						pointCloudVertices.data(), GL_STATIC_DRAW);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, posSSBO);
+
+			// colors
+			glGenBuffers(1, &colorSSBO);
+			glBindBuffer(GL_SHADER_STORAGE_BUFFER, colorSSBO);
+			glBufferData(GL_SHADER_STORAGE_BUFFER,
+						pointCloudColors.size() * sizeof(glm::vec4),
+						pointCloudColors.data(), GL_STATIC_DRAW);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, colorSSBO);
+		}
+
+	}
+
+	void draw(){
+		glm::mat4 modelMatrix = glm::mat4(1.0f);
+		// TO DO: A modificar si es necessari
+		GLuint modelMatrixLoc = glGetUniformLocation(program, "modelMatrix");
+		glUniformMatrix4fv(modelMatrixLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+		//Invertim la matriu model per crear la matriu normal i la passem a GPU
+		mat4 normalMatrix = transpose(inverse(modelMatrix));
+		GLuint normalMatrixLoc = glGetUniformLocation(program, "normalMatrix");
+		glUniformMatrix4fv(normalMatrixLoc, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+		glBindVertexArray(VAO);
+		glPointSize(1);
+		glDrawArrays(GL_POINTS, 0, pointCloudVertices.size());
+		glBindVertexArray(0);
+	}
 };
