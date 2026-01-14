@@ -10,8 +10,9 @@
 This thesis focuses on optimization methods for the visualization of 3D point clouds in real time. These clouds have a lot of points, usually in the order of millions, this makes it so their visualization becomes computationally very costly and hard to do in real time, and so optimization techniques have to be introduced. In this context, this thesis focuses on two methods: the use of compute shaders and the use of the Lebesgue curve for the ordering of the points of the point cloud. In the first part of this thesis it formalizes and studies concepts such as the concept of a point cloud or the Lebesgue curve. It also explores other methods, like the use of traditional graphic pipeline or the elimination of Z-Test, and other orders, like randomly ordering the points or shuffling the points of the Lebesgue curve. The second part of this thesis consists in the design and implementation of a program that incorporates all the studied methods, so that one is able to visualize these point clouds in real time. It also includes a comparison of all the implemented methods and orders, with the objective of finding the best combination of rendering method and ordering of the points depending on the situation.
 
 ## Gallery
+The following image illustrates the point clouds used and the performance of the methods implemented.
 
-![alt text](https://github.com/VictorGonzalez02/TFG-VictorGonzalez/tree/main/images/GraphPointClouds.png)
+![alt text](https://github.com/VictorGonzalez02/TFG-VictorGonzalez/raw/main/images/GraphPointClouds.png)
 
 ## How to install
 
