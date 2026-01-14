@@ -21,8 +21,6 @@
 #include"external/imgui/backends/imgui_impl_opengl3.h"
 #include"tinyfiledialogs.h"
 
-#include<soil2/SOIL2.h>
-
 #include"Utilities/Shader.h";
 #include"GeometricObjects/Material.h";
 #include"GeometricObjects/Vertex.h"
